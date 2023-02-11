@@ -4,11 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.*
-import android.graphics.drawable.Drawable
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -33,7 +31,6 @@ import com.ct.mycameralibray.*
 import com.ct.mycameralibray.databinding.FragmentCameraBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
-
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -47,6 +44,7 @@ typealias LumaListener = (luma: Double) -> Unit
 class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
     lateinit var binding: FragmentCameraBinding
+
 
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
@@ -78,8 +76,33 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     var myListener: MyListener? = null
 
     companion object Ratio {
+        var camImages: CamImages? = null;
+        var camListImages: CamListImages? = null;
+        @JvmName("setCamImages1")
+        fun setCamImages(cameraImages:CamImages) {
+             camImages = cameraImages;
+        }
+        @JvmName("setCamListImages1")
+        fun setCamListImages(cameraListImages:CamListImages) {
+            camListImages = cameraListImages;
+        }
+
+
+
         var ASPECT_RATIO: Double = 0.0
     }
+
+    interface CamListImages {
+        fun myCamListImages(myCameraImages: ArrayList<ImageTags>)
+    }
+
+    interface CamImages {
+        fun myCamImages(myCameraImages: ArrayList<ImageTags>,pos:Int)
+    }
+
+
+
+
 
 
 
@@ -88,11 +111,12 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentCameraBinding.inflate(layoutInflater,container,false)
+        binding = FragmentCameraBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -133,9 +157,9 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             )
         }
 
-        binding.imgSettings.setOnClickListener{
-           /* val intent = Intent(binding.root.context, BottomSheetViewActivity::class.java)
-            startActivity(intent)*/
+        binding.imgSettings.setOnClickListener {
+            /* val intent = Intent(binding.root.context, BottomSheetViewActivity::class.java)
+             startActivity(intent)*/
             val bottomSheet = CameraSettingsBottomSheet(myListener!!)
             bottomSheet.show(requireActivity().getSupportFragmentManager(), "CameraBottomSheet")
         }
@@ -204,6 +228,14 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
             imagesList[imageCount].imgPath = oldUri?.path
             try {
+/*                val imgLists = object : com.ct.mycameralibray.MyImageList {
+                    override fun myImageList(imgList: ArrayList<ImageTags>) {
+                        for (i in imageCount until imagesList.size) {
+                            imgList.add(imagesList.get(i))
+                        }
+                    }
+                }*/
+                camListImages?.myCamListImages(imagesList)
                 /*val resultIntent = Intent(binding.root.context, ImagesActivity::class.java)
                 resultIntent.putExtra("from","camera")
                 resultIntent.putExtra("images_list", imagesList)
@@ -226,7 +258,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 Log.d("TAG", "getFilePath: ${oldUri?.path}")
                 imagesList[imageCount].imgPath = oldUri?.path
                 try {
-                    Log.e("#####", "onCreate: $$$$" )
+                    Log.e("#####", "onCreate: $$$$")
                     printPaths()
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -237,13 +269,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 Log.d("TAG", "getFilePath1: ${oldUri?.path}")
                 imagesList[imageCount].imgPath = oldUri?.path
                 try {
-                   /* val intent1 = Intent(binding.root.context, CameraActivity::class.java)
-                    val bundleObject = Bundle()
-                    bundleObject.putSerializable("images_list", imagesList)
-                    bundleObject.putInt("position", skipImages())
-                    intent1.putExtras(bundleObject)
-                    startActivity(intent1)*/
-                    requireActivity().finish()
+                    camImages?.myCamImages(imagesList,skipImages())
+                   // requireActivity().finish()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -254,7 +281,10 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     private fun allPermissionsGranted() = mutableListOf(Manifest.permission.CAMERA).apply {
@@ -262,7 +292,10 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
     }.toTypedArray().all {
-        ContextCompat.checkSelfPermission(binding.root.context, it) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(
+            binding.root.context,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -688,7 +721,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                Toast.makeText(binding.root.context, "permission not granted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(binding.root.context, "permission not granted", Toast.LENGTH_SHORT)
+                    .show()
                 requireActivity().finish()
             }
         }
@@ -748,11 +782,11 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     }
 
     private fun printPaths() {
-       /* val intent = Intent(binding.root.context, ImagesActivity::class.java)
-        val bundleObject = Bundle()
-        bundleObject.putSerializable("images_list", imagesList)
-        intent.putExtras(bundleObject)
-        startActivity(intent)*/
+        /* val intent = Intent(binding.root.context, ImagesActivity::class.java)
+         val bundleObject = Bundle()
+         bundleObject.putSerializable("images_list", imagesList)
+         intent.putExtras(bundleObject)
+         startActivity(intent)*/
         requireActivity().finish()
     }
 
@@ -788,13 +822,14 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
+
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             try {
-              /*  val resultIntent = Intent(binding.root.context, ImagesActivity::class.java)
-                resultIntent.putExtra("return_object", imagesList)
-                resultIntent.putExtra("from", "camera")
-                startActivity(resultIntent)*/
+                /*  val resultIntent = Intent(binding.root.context, ImagesActivity::class.java)
+                  resultIntent.putExtra("return_object", imagesList)
+                  resultIntent.putExtra("from", "camera")
+                  startActivity(resultIntent)*/
                 requireActivity().finish()
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -802,7 +837,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         }
     }
 
-    override fun applyListener(){
+    override fun applyListener() {
     }
 
 

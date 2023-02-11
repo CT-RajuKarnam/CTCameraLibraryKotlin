@@ -22,29 +22,19 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.nio.charset.StandardCharsets
 
-class ImagesActivity : AppCompatActivity() {
+class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
 
     lateinit var binding: ActivityImagesBinding
     var imagesList: ArrayList<ImageTags>? = ArrayList()
-    val TAG: String = "ImagesActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        if (intent.extras != null) {
-            imagesList?.clear()
-            imagesList = intent.extras!!.getSerializable("images_list") as ArrayList<ImageTags>
-            if (imagesList != null && imagesList!!.size > 0) {
-                binding.lvImgTags.adapter = Pictures(imagesList)
-            }
-        } else {
-            binding.lvImgTags.adapter = Pictures(imagesList)
-            checkcamera()
-        }
-
-
+        val camFrag = CameraFragment;
+        camFrag.setCamListImages(this)
+        binding.lvImgTags.adapter = Pictures(imagesList)
+        loadData()
     }
 
     @SuppressLint("ViewHolder")
@@ -74,36 +64,19 @@ class ImagesActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: Pictures.MyViewHolder, position: Int) {
             holder.imageName.text = list!![position].imgName
-
-            if(!imagesList!![position].imgPath.isNullOrEmpty()) {
-                Log.e(TAG, "abcd" + imagesList!![position].imgPath.toString())
+            if (!imagesList!![position].imgPath.isNullOrEmpty()) {
                 val uri = Uri.parse(imagesList!![position].imgPath)
-                Log.e("!!!!!",imagesList!![position].imgPath)
-                Log.e("@@@@",uri.toString())
                 holder.captureImage.setImageURI(uri)
                 holder.captureImage.visibility = View.VISIBLE
                 holder.btnSelectImage.visibility = View.GONE
             }
-
-            Log.e(TAG, "onBindViewHolder: $list")
-
             holder.btnSelectImage.setOnClickListener {
-
                 val intent = Intent(this@ImagesActivity, CameraActivity::class.java)
-//                val fragment = CameraFragment()
-//                val bundle = Bundle()
                 intent.putExtra("images_list", imagesList)
                 intent.putExtra("position", position)
-//                fragment.arguments = bundle
-                startActivityForResult(intent,12)
-                //startActivity(intent)
-//                finish()
+                startActivity(intent, )
             }
-            /*holder.captureImage.setImageBitmap(
-                Bitmap.createScaledBitmap(
-                    bitmap!!, 80, 80, true
-                )
-            )*/
+
         }
 
         override fun getItemCount(): Int {
@@ -127,14 +100,13 @@ class ImagesActivity : AppCompatActivity() {
     }
 
 
-    private fun checkcamera() {
-        var `object`: JSONObject? = null
+    private fun loadData() {
+        var jsonObject: JSONObject? = null
         try {
-            `object` = JSONObject(loadJSONFromAsset())
-            val images = `object`.getJSONArray("CamImages")
+            jsonObject = JSONObject(loadJSONFromAsset())
+            val images = jsonObject.getJSONArray("CamImages")
             imagesList?.clear()
             for (i in 0 until images.length()) {
-                val rec = images.getJSONObject(i)
                 imagesList?.add(Gson().fromJson(images[i].toString(), ImageTags::class.java))
             }
             binding.lvImgTags.adapter?.notifyDataSetChanged()
@@ -143,11 +115,14 @@ class ImagesActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode==12){
-            Log.e("paths",data?.data.toString());
-        }
+
+
+    override fun myCamListImages(myCameraImages: ArrayList<ImageTags>) {
+        imagesList?.clear()
+        imagesList = myCameraImages;
+        binding.lvImgTags.adapter = Pictures(imagesList)
+        Log.e("####", "Camera Images@" + imagesList!!.get(0).imgPath);
+        Log.e("####", "Camera Images#" + imagesList!!.get(0).imgName);
     }
 
 }
