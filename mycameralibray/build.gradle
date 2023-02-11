@@ -38,12 +38,11 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
     def camerax_version = "1.1.0"
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
@@ -59,7 +58,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.github.CT-RajuKarnam'
                 artifactId = 'CTCameraLibraryKotlin'
-                version = '1.2'
+                version = '1.4'
                 artifact(bundleReleaseAar)
             }
         }

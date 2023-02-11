@@ -1,6 +1,5 @@
 package com.ct.mycameralibray
 
-import androidx.appcompat.widget.AppCompatSeekBar
 import kotlin.jvm.Synchronized
 import android.graphics.drawable.Drawable
 import android.annotation.SuppressLint
@@ -10,6 +9,7 @@ import android.graphics.Color
 import android.view.MotionEvent
 import android.graphics.PorterDuff
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatSeekBar
 
 class VerticalSeekBar : AppCompatSeekBar {
     constructor(context: Context?) : super(context!!)
