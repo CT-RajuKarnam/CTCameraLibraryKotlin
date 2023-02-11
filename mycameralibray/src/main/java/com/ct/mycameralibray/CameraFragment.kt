@@ -124,7 +124,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appLocationService = AppLocationService(binding.root.context);
+      //  appLocationService = AppLocationService(binding.root.context);
+
 
         imageCount = arguments?.getInt("position")!!
         imagesList = arguments?.getSerializable("images_list") as ArrayList<ImageTags>
@@ -133,11 +134,11 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
         //Aspect Ratio
         if (imagesList[imageCount].imgOrientation.equals("P")) {
-            Pref.getIn(binding.root.context).orientationFlag = false
+            CamPref.getIn(binding.root.context).orientationFlag = false
             ASPECT_RATIO = 3.0 / 4.0
             requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         } else {
-            Pref.getIn(binding.root.context).orientationFlag = true
+            CamPref.getIn(binding.root.context).orientationFlag = true
             ASPECT_RATIO = 4.0 / 3.0
             requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
@@ -170,7 +171,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         //capture image
         binding.captureImg.setOnClickListener {
 
-            shutterFlag = if (Pref.getIn(binding.root.context)
+            shutterFlag = if (CamPref.getIn(binding.root.context)
                     .orientationFlag
             ) { //(x>=7 and (z<=5 and z>-1) (y>-3 and y<4)//land scape
                 x > 6 && z > -1 && z < 6 && y > -3 && y < 4
@@ -230,7 +231,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 }
             } else {
                 binding.titleName.visibility = View.VISIBLE
-                if (Pref.getIn(binding.root.context).orientationFlag) {
+                if (CamPref.getIn(binding.root.context).orientationFlag) {
                     showToast("Please capture photo in landscape only", toastAngle)
                 } else {
                     showToast("Please capture photo in portrait only", toastAngle)
@@ -319,15 +320,15 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 binding.txtTimeStamp.post(Runnable {
                     if (binding.txtTimeStamp != null) {
                         var desc = ""
-                        if (Pref.getIn(binding.root.context).camShowTime) {
+                        if (CamPref.getIn(binding.root.context).isCamShowTime) {
                             desc = DateFormat.format("dd-MM-yyyy HH:mm:ss", Date()).toString();
                         }
 
-                        if (Pref.getIn(binding.root.context).camShowLatLng) {
+                        if (CamPref.getIn(binding.root.context).isCamShowLatLong) {
                             if(appLocationService.getLocation()!=null)
                                 desc = desc + "\nLat: " + twoDecimalForm.format(appLocationService.getLatitude())+", Lng:"+twoDecimalForm.format(appLocationService.getLongitude());
                         }
-                        if (Pref.getIn(binding.root.context).camShowAddress) {
+                        if (CamPref.getIn(binding.root.context).isCamShowAddress) {
                             if(appLocationService.getLocation()!=null)
                                 desc = desc + "\nAddress: " + appLocationService.getAddress();
                         }
@@ -402,10 +403,10 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 camera?.cameraControl?.enableTorch(camera?.cameraInfo?.torchState?.value == TorchState.OFF)
                 if (camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
                     binding.btnFlash.setImageResource(com.ct.mycameralibray.R.drawable.ic_flash_off)
-                    Pref.getIn(binding.root.context).cameraFlash = "off"
+                    CamPref.getIn(binding.root.context).camFlashMode = "off"
                 } else if (camera?.cameraInfo?.torchState?.value == TorchState.ON) {
                     binding.btnFlash.setImageResource(com.ct.mycameralibray.R.drawable.ic_flash_on)
-                    Pref.getIn(binding.root.context).cameraFlash = "on"
+                    CamPref.getIn(binding.root.context).camFlashMode = "on"
                 }
             } else {
                 binding.btnFlash.visibility = View.GONE
@@ -457,7 +458,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         })
 
         //Flash check
-        if (Pref.getIn(binding.root.context).cameraFlash == "off") {
+        if (CamPref.getIn(binding.root.context).camFlashMode == "off") {
             Handler(Looper.myLooper()!!).postDelayed({
                 if (camera?.cameraInfo?.hasFlashUnit() == true) {
                     binding.btnFlash.visibility = View.VISIBLE
@@ -467,7 +468,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             }, 0)
 
 
-        } else if (Pref.getIn(binding.root.context).cameraFlash == "on") {
+        } else if (CamPref.getIn(binding.root.context).camFlashMode == "on") {
             Handler(Looper.myLooper()!!).postDelayed({
                 if (camera?.cameraInfo?.hasFlashUnit() == true) {
                     binding.btnFlash.visibility = View.VISIBLE
@@ -834,11 +835,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     }
 
     private fun printPaths() {
-        /* val intent = Intent(binding.root.context, ImagesActivity::class.java)
-         val bundleObject = Bundle()
-         bundleObject.putSerializable("images_list", imagesList)
-         intent.putExtras(bundleObject)
-         startActivity(intent)*/
+        camListImages?.myCamListImages(imagesList)
         requireActivity().finish()
     }
 
@@ -892,20 +889,20 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     override fun applyListener() {
 
         /*water mark position*/
-        if (Pref.getIn(binding.root.context).camShowWaterMark) {
+        if (CamPref.getIn(binding.root.context).isCamShowWaterMark) {
             binding.watermarkLogo.visibility= View.VISIBLE
             val params = binding.watermarkLogo.getLayoutParams() as FrameLayout.LayoutParams
-            params.gravity = Pref.getIn(binding.root.context).camShowWaterMarkAt
+            params.gravity = CamPref.getIn(binding.root.context).camShowWaterMarkAtPos
             binding.watermarkLogo.layoutParams = params
         }else{
             binding.watermarkLogo.visibility= View.GONE
         }
 
         /*Text overlay*/
-        if (Pref.getIn(binding.root.context).camShowTime || Pref.getIn(binding.root.context).camShowAddress ||
-            Pref.getIn(binding.root.context).camShowLatLng) {
+        if (CamPref.getIn(binding.root.context).isCamShowTime || CamPref.getIn(binding.root.context).isCamShowAddress ||
+            CamPref.getIn(binding.root.context).isCamShowLatLong) {
             binding.txtTimeStamp.visibility= View.VISIBLE
-            binding.txtTimeStamp.gravity = Pref.getIn(binding.root.context).camDescPosition
+            binding.txtTimeStamp.gravity = CamPref.getIn(binding.root.context).camDescPosition
 
         } else {
             binding.txtTimeStamp.visibility= View.GONE

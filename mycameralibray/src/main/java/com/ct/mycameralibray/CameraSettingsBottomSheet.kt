@@ -1,8 +1,6 @@
 package com.ct.mycameralibray
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -86,21 +84,21 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swWatermark!!.isChecked = Pref.getIn(requireContext()).camShowWaterMark
-        swAddress!!.isChecked = Pref.getIn(requireContext()).camShowAddress
-        swLatLng!!.isChecked = Pref.getIn(requireContext()).camShowLatLng
-        swTime!!.isChecked = Pref.getIn(requireContext()).camShowTime
-        swTextOverlay!!.isChecked = Pref.getIn(requireContext()).camShowOverlayImg
-        swGuideBox!!.isChecked = Pref.getIn(requireContext()).camShowGuideBox
-        swLabel!!.isChecked = Pref.getIn(requireContext()).camShowImageLabel
-        swHelper!!.isChecked = Pref.getIn(requireContext()).camShowOverlayImg
-        if (Pref.getIn(requireContext()).camAspectRatio.equals("Full", ignoreCase = true)) {
+        swWatermark!!.isChecked = CamPref.getIn(requireContext()).isCamShowWaterMark
+        swAddress!!.isChecked = CamPref.getIn(requireContext()).isCamShowAddress
+        swLatLng!!.isChecked = CamPref.getIn(requireContext()).isCamShowLatLong
+        swTime!!.isChecked = CamPref.getIn(requireContext()).isCamShowTime
+        swTextOverlay!!.isChecked = CamPref.getIn(requireContext()).isCamShowOverlayImg
+        swGuideBox!!.isChecked = CamPref.getIn(requireContext()).isCamShowGuidBox
+        swLabel!!.isChecked = CamPref.getIn(requireContext()).isCamShowLabelName
+        swHelper!!.isChecked = CamPref.getIn(requireContext()).isCamShowOverlayImg
+        if (CamPref.getIn(requireContext()).camAspectRatio.equals("Full", ignoreCase = true)) {
             rbFull!!.isChecked = true
-        } else if (Pref.getIn(requireContext()).camAspectRatio.equals("9:16", ignoreCase = true)) {
+        } else if (CamPref.getIn(requireContext()).camAspectRatio.equals("9:16", ignoreCase = true)) {
             rb916!!.isChecked = true
-        } else if (Pref.getIn(requireContext()).camAspectRatio.equals("3:4", ignoreCase = true)) {
+        } else if (CamPref.getIn(requireContext()).camAspectRatio.equals("3:4", ignoreCase = true)) {
             rb34!!.isChecked = true
-        } else if (Pref.getIn(requireContext()).camAspectRatio.equals("1:1", ignoreCase = true)) {
+        } else if (CamPref.getIn(requireContext()).camAspectRatio.equals("1:1", ignoreCase = true)) {
             rb11!!.isChecked = true
         } else {
             rbFull!!.isChecked = false
@@ -116,56 +114,56 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
             dismiss()
         }
         btnReset!!.setOnClickListener { view13: View? ->
-            Pref.getIn(requireContext()).clearPref()
+            CamPref.getIn(requireContext()).clearPref()
             myListener.applyListener()
             dismiss()
         }
         swWatermark!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
             if (b) {
-                Pref.getIn(requireContext()).camShowWaterMark = true
+                CamPref.getIn(requireContext()).isCamShowWaterMark = true
                 spWatermarkPosition!!.setSelection(1, true)
             } else {
-                Pref.getIn(requireContext()).camShowWaterMark = false
+                CamPref.getIn(requireContext()).isCamShowWaterMark = false
                 spWatermarkPosition!!.setSelection(0, true)
             }
         }
         swAddress!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
             if (b) {
-                Pref.getIn(requireContext()).camShowAddress = true
+                CamPref.getIn(requireContext()).isCamShowAddress = true
                 swTextOverlay!!.isChecked = true
             } else {
-                Pref.getIn(requireContext()).camShowAddress = false
-                if (!Pref.getIn(requireContext()).camShowTime && !Pref.getIn(requireContext()).camShowLatLng) {
+                CamPref.getIn(requireContext()).isCamShowAddress = false
+                if (!CamPref.getIn(requireContext()).isCamShowTime && !CamPref.getIn(requireContext()).isCamShowLatLong) {
                     swTextOverlay!!.isChecked = false
                 }
             }
         }
         swLatLng!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
             if (b) {
-                Pref.getIn(requireContext()).camShowLatLng = true
+                CamPref.getIn(requireContext()).isCamShowLatLong = true
                 swTextOverlay!!.isChecked = true
             } else {
-                Pref.getIn(requireContext()).camShowLatLng = false
-                if (!Pref.getIn(requireContext()).camShowAddress && !Pref.getIn(requireContext()).camShowTime) {
+                CamPref.getIn(requireContext()).isCamShowLatLong = false
+                if (!CamPref.getIn(requireContext()).isCamShowAddress && !CamPref.getIn(requireContext()).isCamShowTime) {
                     swTextOverlay!!.isChecked = false
                 }
             }
         }
         swTime!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
             if (b) {
-                Pref.getIn(requireContext()).camShowTime = true
+                CamPref.getIn(requireContext()).isCamShowTime = true
                 swTextOverlay!!.isChecked = true
             } else {
-                Pref.getIn(requireContext()).camShowTime = false
-                if (!Pref.getIn(requireContext()).camShowAddress && !Pref.getIn(requireContext()).camShowLatLng) {
+                CamPref.getIn(requireContext()).isCamShowTime = false
+                if (!CamPref.getIn(requireContext()).isCamShowAddress && !CamPref.getIn(requireContext()).isCamShowLatLong) {
                     swTextOverlay!!.isChecked = false
                 }
             }
         }
         swTextOverlay!!.isChecked =
-            Pref.getIn(requireContext()).camShowAddress || Pref.getIn(requireContext()).camShowLatLng || Pref.getIn(
+            CamPref.getIn(requireContext()).isCamShowAddress || CamPref.getIn(requireContext()).isCamShowLatLong || CamPref.getIn(
                 requireContext()
-            ).camShowTime
+            ).isCamShowTime
         swTextOverlay!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
             if (b) {
                 spTextAt!!.setSelection(1, true)
@@ -174,31 +172,31 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
             }
         }
         swGuideBox!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            Pref.getIn(
+            CamPref.getIn(
                 requireContext()
-            ).camShowGuideBox = b
+            ).isCamShowGuidBox = b
         }
         swLabel!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            Pref.getIn(
+            CamPref.getIn(
                 requireContext()
-            ).camShowImageLabel = b
+            ).isCamShowLabelName = b
         }
         swHelper!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
-            Pref.getIn(
+            CamPref.getIn(
                 requireContext()
-            ).camShowOverlayImg = b
+            ).isCamShowOverlayImg = b
         }
         rgAspectRatio!!.setOnCheckedChangeListener { radioGroup: RadioGroup?, i: Int ->
             if (i == R.id.rbFull) {
-                Pref.getIn(requireContext()).camAspectRatio = "Full"
+                CamPref.getIn(requireContext()).camAspectRatio = "Full"
             } else if (i == R.id.rb916) {
-                Pref.getIn(requireContext()).camAspectRatio = "9:16"
+                CamPref.getIn(requireContext()).camAspectRatio = "9:16"
             } else if (i == R.id.rb34) {
-                Pref.getIn(requireContext()).camAspectRatio = "3:4"
+                CamPref.getIn(requireContext()).camAspectRatio = "3:4"
             } else if (i == R.id.rb11) {
-                Pref.getIn(requireContext()).camAspectRatio = "1:1"
+                CamPref.getIn(requireContext()).camAspectRatio = "1:1"
             } else {
-                Pref.getIn(requireContext()).camAspectRatio = ""
+                CamPref.getIn(requireContext()).camAspectRatio = ""
             }
         }
         val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
@@ -219,22 +217,22 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
         spWatermarkPosition!!.adapter = adapter
         spTextAt!!.adapter = adapter1
         spAspectRatio!!.adapter = adapter2
-        for (i in 1 until watermarkPosition.size) {
-            watermark = Pref.getIn(requireContext()).camWatermarkValue
+        /*for (i in 1 until watermarkPosition.size) {
+            watermark = CamPref.getIn(requireContext()).camShowWaterMarkAt
             if (watermarkPosition[i] == watermark) {
                 watermarkStatePosition = watermarkPosition[i]
                 spWatermarkPosition!!.setSelection(i)
             }
-        }
+        }*/
         for (j in 1 until descPosition.size) {
-            desc = Pref.getIn(requireContext()).camDescValue
+            desc = CamPref.getIn(requireContext()).camDescValue
             if (descPosition[j] == desc) {
                 descStatePosition = descPosition[j]
                 spTextAt!!.setSelection(j)
             }
         }
         for (k in 1 until aspectRatioPosition.size) {
-            aspectRatio = Pref.getIn(requireContext()).camAspectRatio
+            aspectRatio = CamPref.getIn(requireContext()).camAspectRatio
             if (aspectRatioPosition[k] == aspectRatio) {
                 arStatePosition = aspectRatioPosition[k]
                 spAspectRatio!!.setSelection(k)
@@ -249,32 +247,32 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
             ) {
                 if (position > 0) {
                     if (watermarkPosition[position].equals("Top-Left", ignoreCase = true)) {
-                        Pref.getIn(requireContext()).camShowWaterMarkAt =
+                        CamPref.getIn(requireContext()).camShowWaterMarkAtPos =
                             Gravity.TOP or Gravity.LEFT
-                        Pref.getIn(requireContext()).camWatermarkValue = "Top-Left"
+                        CamPref.getIn(requireContext()).camShowWaterMarkAt = "Top-Left"
                     } else if (watermarkPosition[position].equals("Top-Right", ignoreCase = true)) {
-                        Pref.getIn(requireContext()).camShowWaterMarkAt =
+                        CamPref.getIn(requireContext()).camShowWaterMarkAtPos =
                             Gravity.TOP or Gravity.RIGHT
-                        Pref.getIn(requireContext()).camWatermarkValue = "Top-Right"
+                        CamPref.getIn(requireContext()).camShowWaterMarkAt = "Top-Right"
                     } else if (watermarkPosition[position].equals(
                             "Bottom-Left",
                             ignoreCase = true
                         )
                     ) {
-                        Pref.getIn(requireContext()).camShowWaterMarkAt =
+                        CamPref.getIn(requireContext()).camShowWaterMarkAtPos =
                             Gravity.BOTTOM or Gravity.LEFT
-                        Pref.getIn(requireContext()).camWatermarkValue = "Bottom-Left"
+                        CamPref.getIn(requireContext()).camShowWaterMarkAt = "Bottom-Left"
                     } else if (watermarkPosition[position].equals(
                             "Bottom-right",
                             ignoreCase = true
                         )
                     ) {
-                        Pref.getIn(requireContext()).camShowWaterMarkAt =
+                        CamPref.getIn(requireContext()).camShowWaterMarkAtPos =
                             Gravity.BOTTOM or Gravity.RIGHT
-                        Pref.getIn(requireContext()).camWatermarkValue = "Bottom-right"
+                        CamPref.getIn(requireContext()).camShowWaterMarkAt = "Bottom-right"
                     } else {
-                        Pref.getIn(requireContext()).camShowWaterMarkAt = 0
-                        Pref.getIn(requireContext()).camWatermarkValue = "Top-Left"
+                        CamPref.getIn(requireContext()).camShowWaterMarkAtPos = 0
+                        CamPref.getIn(requireContext()).camShowWaterMarkAt = "Top-Left"
                     }
                 }
             }
@@ -290,22 +288,22 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
             ) {
                 if (position > 0) {
                     if (descPosition[position].equals("Top-Left", ignoreCase = true)) {
-                        Pref.getIn(requireContext()).camDescPosition = Gravity.TOP or Gravity.LEFT
-                        Pref.getIn(requireContext()).camShowTextAt = "Top-Left"
+                        CamPref.getIn(requireContext()).camDescPosition = Gravity.TOP or Gravity.LEFT
+                        CamPref.getIn(requireContext()).camShowTextAt = "Top-Left"
                     } else if (descPosition[position].equals("Top-Right", ignoreCase = true)) {
-                        Pref.getIn(requireContext()).camDescPosition = Gravity.TOP or Gravity.RIGHT
-                        Pref.getIn(requireContext()).camShowTextAt = "Top-Right"
+                        CamPref.getIn(requireContext()).camDescPosition = Gravity.TOP or Gravity.RIGHT
+                        CamPref.getIn(requireContext()).camShowTextAt = "Top-Right"
                     } else if (descPosition[position].equals("Bottom-Left", ignoreCase = true)) {
-                        Pref.getIn(requireContext()).camDescPosition =
+                        CamPref.getIn(requireContext()).camDescPosition =
                             Gravity.BOTTOM or Gravity.LEFT
-                        Pref.getIn(requireContext()).camShowTextAt = "Bottom-Left"
+                        CamPref.getIn(requireContext()).camShowTextAt = "Bottom-Left"
                     } else if (descPosition[position].equals("Bottom-right", ignoreCase = true)) {
-                        Pref.getIn(requireContext()).camDescPosition =
+                        CamPref.getIn(requireContext()).camDescPosition =
                             Gravity.BOTTOM or Gravity.RIGHT
-                        Pref.getIn(requireContext()).camShowTextAt = "Bottom-right"
+                        CamPref.getIn(requireContext()).camShowTextAt = "Bottom-right"
                     } else {
-                        Pref.getIn(requireContext()).camDescPosition = 0
-                        Pref.getIn(requireContext()).camShowTextAt = "Top-Left"
+                        CamPref.getIn(requireContext()).camDescPosition = 0
+                        CamPref.getIn(requireContext()).camShowTextAt = "Top-Left"
                     }
                 }
             }
@@ -320,7 +318,7 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
                 l: Long
             ) {
                 if (position > 0) {
-                    Pref.getIn(requireContext()).camAspectRatio = aspectRatioPosition[position]
+                    CamPref.getIn(requireContext()).camAspectRatio = aspectRatioPosition[position]
                 }
             }
 
