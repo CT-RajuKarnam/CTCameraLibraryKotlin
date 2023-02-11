@@ -15,8 +15,10 @@ import android.location.LocationRequest
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.*
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -36,6 +38,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.text.DecimalFormat
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -44,6 +47,7 @@ typealias LumaListener = (luma: Double) -> Unit
 class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
     lateinit var binding: FragmentCameraBinding
+    var twoDecimalForm = DecimalFormat("#.######")
 
 
     private var imageCapture: ImageCapture? = null
@@ -75,6 +79,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
     var myListener: MyListener? = null
 
+    lateinit var appLocationService: AppLocationService
+
     companion object Ratio {
         var camImages: CamImages? = null;
         var camListImages: CamListImages? = null;
@@ -101,11 +107,6 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     }
 
 
-
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -122,6 +123,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        appLocationService = AppLocationService(binding.root.context);
 
         imageCount = arguments?.getInt("position")!!
         imagesList = arguments?.getSerializable("images_list") as ArrayList<ImageTags>
@@ -182,10 +185,33 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 try {
-                    val bitmap = binding.cameraView.bitmap
-                    binding.selfie.setImageBitmap(bitmap)
+                    val bitmap:Bitmap = binding.cameraView.bitmap!!
+
+                    /*by ram*/
+                    val fl_view = binding.flView
+                    //binding.txtTimeStamp.gravity = Gravity.LEFT
+                    val bitmapNew: Bitmap = copyBitmap(bitmap)
+                    val canvas = Canvas(bitmapNew)
+                    canvas.drawARGB(0, 0, 0, 0)
+                    fl_view.setDrawingCacheEnabled(true)
+                    fl_view.measure(
+                        View.MeasureSpec.makeMeasureSpec(canvas.width, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(canvas.height, View.MeasureSpec.EXACTLY)
+                    )
+                    fl_view.layout(0, 0, fl_view.getMeasuredWidth(), fl_view.getMeasuredHeight())
+                    fl_view.draw(canvas)
+
+
+                    /*end by ram*/
+
+                    binding.selfie.setImageBitmap(bitmapNew)
+
+
+
                     binding.selfie.visibility = View.VISIBLE
                     cameraExecutor.shutdown()
+                    binding.flView.visibility = View.GONE
+                    binding.flViewHide.visibility = View.GONE
                     binding.cameraView.visibility = View.GONE
                     binding.titleName.visibility = View.GONE
                     binding.captureLayout.visibility = View.GONE
@@ -285,6 +311,32 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             viewLifecycleOwner,
             onBackPressedCallback
         )
+
+        /*by ram for timer*/
+        val t1 = Timer("frame", true)
+        t1.schedule(object : TimerTask() {
+            override fun run() {
+                binding.txtTimeStamp.post(Runnable {
+                    if (binding.txtTimeStamp != null) {
+                        var desc = ""
+                        if (Pref.getIn(binding.root.context).camShowTime) {
+                            desc = DateFormat.format("dd-MM-yyyy HH:mm:ss", Date()).toString();
+                        }
+
+                        if (Pref.getIn(binding.root.context).camShowLatLng) {
+                            if(appLocationService.getLocation()!=null)
+                                desc = desc + "\nLat: " + twoDecimalForm.format(appLocationService.getLatitude())+", Lng:"+twoDecimalForm.format(appLocationService.getLongitude());
+                        }
+                        if (Pref.getIn(binding.root.context).camShowAddress) {
+                            if(appLocationService.getLocation()!=null)
+                                desc = desc + "\nAddress: " + appLocationService.getAddress();
+                        }
+                        binding.txtTimeStamp.setText(desc)
+                     }
+                })
+            }
+        }, 1000, 1000)
+
     }
 
     private fun allPermissionsGranted() = mutableListOf(Manifest.permission.CAMERA).apply {
@@ -838,6 +890,37 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     }
 
     override fun applyListener() {
+
+        /*water mark position*/
+        if (Pref.getIn(binding.root.context).camShowWaterMark) {
+            binding.watermarkLogo.visibility= View.VISIBLE
+            val params = binding.watermarkLogo.getLayoutParams() as FrameLayout.LayoutParams
+            params.gravity = Pref.getIn(binding.root.context).camShowWaterMarkAt
+            binding.watermarkLogo.layoutParams = params
+        }else{
+            binding.watermarkLogo.visibility= View.GONE
+        }
+
+        /*Text overlay*/
+        if (Pref.getIn(binding.root.context).camShowTime || Pref.getIn(binding.root.context).camShowAddress ||
+            Pref.getIn(binding.root.context).camShowLatLng) {
+            binding.txtTimeStamp.visibility= View.VISIBLE
+            binding.txtTimeStamp.gravity = Pref.getIn(binding.root.context).camDescPosition
+
+        } else {
+            binding.txtTimeStamp.visibility= View.GONE
+        }
+    }
+
+    fun copyBitmap(src: Bitmap): Bitmap {
+        val config = if (src.config != null) src.config else Bitmap.Config.ARGB_8888
+        val copy = Bitmap.createBitmap(src.width, src.height, config)
+        val canvas = Canvas(copy)
+        val paint = Paint().apply {
+            xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC)
+        }
+        canvas.drawBitmap(src, 0f, 0f, paint)
+        return copy
     }
 
 

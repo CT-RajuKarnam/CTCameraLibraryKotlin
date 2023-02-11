@@ -83,6 +83,61 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/fl_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+
+        <ImageView
+            android:id="@+id/watermark_logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="10dp"
+            android:src="@mipmap/ic_launcher" />
+
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:id="@+id/txtTimeStamp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="this is time stamp waiting for code"
+            android:gravity="top|right"
+            android:padding="10dp"
+            android:textColor="@android:color/holo_red_dark" />
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_view_hide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/img_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:src="@mipmap/overlayicon"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:gravity="center_horizontal"
+            android:text="Title/ Image Lable Name"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
     <LinearLayout
         android:id="@+id/captureLayout"
         android:layout_width="wrap_content"
