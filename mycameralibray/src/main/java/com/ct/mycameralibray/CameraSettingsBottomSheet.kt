@@ -1,7 +1,8 @@
-package com.ct.ctcameralib
+package com.ct.mycameralibray
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,13 +13,11 @@ import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.*
-import com.ct.mycameralibray.MyListener
-import com.ct.mycameralibray.Pref
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class CameraSettingsBottomSheet(var activity: Activity, var myListener: MyListener) :
+class CameraSettingsBottomSheet(var myListener: MyListener) :
     BottomSheetDialogFragment() {
     var swWatermark: SwitchCompat? = null
     var swAddress: SwitchCompat? = null
@@ -111,18 +110,15 @@ class CameraSettingsBottomSheet(var activity: Activity, var myListener: MyListen
         }
         imgCloseDialog!!.setOnClickListener { view12: View? ->
             dismiss()
-            activity.finish()
         }
         btnApply!!.setOnClickListener { view1: View? ->
             myListener.applyListener()
             dismiss()
-            activity.finish()
         }
         btnReset!!.setOnClickListener { view13: View? ->
             Pref.getIn(requireContext()).clearPref()
             myListener.applyListener()
             dismiss()
-            activity.finish()
         }
         swWatermark!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
             if (b) {

@@ -29,9 +29,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.ct.mycameralibray.ImageTags
-import com.ct.mycameralibray.MyListener
-import com.ct.mycameralibray.Pref
+import com.ct.mycameralibray.*
 import com.ct.mycameralibray.databinding.FragmentCameraBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -136,10 +134,10 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         }
 
         binding.imgSettings.setOnClickListener{
-            /*val intent = Intent(binding.root.context, BottomSheetViewActivity::class.java)
+           /* val intent = Intent(binding.root.context, BottomSheetViewActivity::class.java)
             startActivity(intent)*/
-//            val bottomSheet = CameraSettingsBottomSheet(myListener!!)
-//            bottomSheet.show(requireActivity().getSupportFragmentManager(), "CameraBottomSheet")
+            val bottomSheet = CameraSettingsBottomSheet(myListener!!)
+            bottomSheet.show(requireActivity().getSupportFragmentManager(), "CameraBottomSheet")
         }
 
         //capture image

@@ -1,4 +1,4 @@
-package com.ct.ctcameralib
+package com.ct.mycameralibray
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +14,7 @@ class BottomSheetViewActivity : AppCompatActivity(),MyListener {
 
         myListener = this
 
-        val bottomSheet = CameraSettingsBottomSheet(this,myListener!!)
+        val bottomSheet = CameraSettingsBottomSheet(myListener!!)
         bottomSheet.show(supportFragmentManager, "CameraBottomSheet")
     }
 
