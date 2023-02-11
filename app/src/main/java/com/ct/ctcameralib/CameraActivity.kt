@@ -32,4 +32,7 @@ class CameraActivity : AppCompatActivity() {
         fragment.arguments = bundle
         fragmentTransaction.replace(R.id.frameLayout, fragment).commit()
     }
+
+    
+
 }

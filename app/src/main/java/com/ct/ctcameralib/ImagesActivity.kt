@@ -95,7 +95,8 @@ class ImagesActivity : AppCompatActivity() {
                 intent.putExtra("images_list", imagesList)
                 intent.putExtra("position", position)
 //                fragment.arguments = bundle
-                startActivity(intent)
+                startActivityForResult(intent,12)
+                //startActivity(intent)
 //                finish()
             }
             /*holder.captureImage.setImageBitmap(
@@ -139,6 +140,13 @@ class ImagesActivity : AppCompatActivity() {
             binding.lvImgTags.adapter?.notifyDataSetChanged()
         } catch (e: JSONException) {
             e.printStackTrace()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==12){
+            Log.e("paths",data?.data.toString());
         }
     }
 
