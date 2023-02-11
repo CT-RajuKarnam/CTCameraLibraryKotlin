@@ -57,7 +57,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.github.CT-RajuKarnam'
                 artifactId = 'CTCameraLibraryKotlin'
-                version = '1.7'
+                version = '1.8'
                 artifact(bundleReleaseAar)
             }
         }

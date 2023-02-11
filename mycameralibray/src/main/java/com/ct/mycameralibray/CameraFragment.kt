@@ -124,7 +124,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-      //  appLocationService = AppLocationService(binding.root.context);
+        appLocationService = AppLocationService(binding.root.context);
 
 
         imageCount = arguments?.getInt("position")!!
