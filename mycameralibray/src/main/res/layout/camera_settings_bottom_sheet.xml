@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -14,153 +13,112 @@
         android:padding="5dp"
         android:src="@drawable/ic_close_bt_dialog" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_top_radius"
-        android:orientation="vertical">
-
-        <RadioGroup
-            android:id="@+id/rgAspectRatio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/rb11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/radio_flat_selector"
-                android:button="@android:color/transparent"
-                android:padding="5dp"
-                android:text="1:1"
-                android:textAlignment="center"
-                android:textColor="@drawable/radio_flat_text_selector"
-                android:theme="@style/SCBSwitch" />
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/rb34"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/radio_flat_selector"
-                android:button="@android:color/transparent"
-                android:padding="5dp"
-                android:text="3:4"
-                android:textAlignment="center"
-                android:textColor="@drawable/radio_flat_text_selector"
-                android:theme="@style/SCBSwitch" />
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/rb916"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/radio_flat_selector"
-                android:button="@android:color/transparent"
-                android:padding="5dp"
-                android:text="9:16"
-                android:textAlignment="center"
-                android:textColor="@drawable/radio_flat_text_selector"
-                android:theme="@style/SCBSwitch" />
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/rbFull"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/radio_flat_selector"
-                android:button="@android:color/transparent"
-                android:padding="5dp"
-                android:text="Full"
-                android:textAlignment="center"
-                android:textColor="@drawable/radio_flat_text_selector"
-                android:theme="@style/SCBSwitch"
-                tools:checked="true" />
-
-        </RadioGroup>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/swLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/txt_Label"
-            android:theme="@style/SCBSwitch"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/swHelper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/txt_helper"
-            android:theme="@style/SCBSwitch"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+        android:overScrollMode="never">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swWatermark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:text="@string/txt_watermark"
-                android:theme="@style/SCBSwitch"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spWatermarkPosition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:entries="@array/watermarkPosition"
-                android:padding="10dp" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5sp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_top_radius"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swAddress"
+            <RadioGroup
+                android:id="@+id/rgAspectRatio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rb11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@android:color/transparent"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:padding="5dp"
+                    android:text="1:1"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/radio_flat_text_selector"
+                    android:theme="@style/SCBSwitch" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rb34"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@android:color/transparent"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:padding="5dp"
+                    android:text="3:4"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/radio_flat_text_selector"
+                    android:theme="@style/SCBSwitch" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rb916"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@android:color/transparent"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:padding="5dp"
+                    android:text="9:16"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/radio_flat_text_selector"
+                    android:theme="@style/SCBSwitch" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/rbFull"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radio_flat_selector"
+                    android:button="@android:color/transparent"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:padding="5dp"
+                    android:text="Full"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/radio_flat_text_selector"
+                    android:theme="@style/SCBSwitch"
+                    tools:checked="true" />
+
+            </RadioGroup>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:padding="10dp"
-                android:text="@string/txt_address"
+                android:text="@string/txt_Label"
                 android:theme="@style/SCBSwitch"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swLatLng"
+                android:id="@+id/swHelper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:padding="10dp"
-                android:text="@string/txt_latitude_amp_longitude"
+                android:text="@string/txt_helper"
                 android:theme="@style/SCBSwitch"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/txt_time"
-                android:theme="@style/SCBSwitch"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
@@ -168,77 +126,146 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/swTextOverlay"
+                    android:id="@+id/swWatermark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
                     android:padding="10dp"
-                    android:text="@string/txt_description"
+                    android:text="@string/txt_watermark"
                     android:theme="@style/SCBSwitch"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spDescPosition"
+                    android:id="@+id/spWatermarkPosition"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:entries="@array/descriptionPosition"
+                    android:entries="@array/watermarkPosition"
                     android:padding="10dp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/swGuideBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/txt_guide_box"
-            android:theme="@style/SCBSwitch"
-            android:visibility="gone"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spAspectRatio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/aspectRatio"
-            android:padding="10dp"
-            android:visibility="gone" />
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnReset"
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@null"
-                android:text="Reset"
-                android:textColor="@color/black" />
+                android:layout_margin="5sp"
+                android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnApply"
-                android:layout_width="wrap_content"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:text="@string/txt_address"
+                    android:theme="@style/SCBSwitch"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swLatLng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:text="@string/txt_latitude_amp_longitude"
+                    android:theme="@style/SCBSwitch"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/swTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:padding="10dp"
+                    android:text="@string/txt_time"
+                    android:theme="@style/SCBSwitch"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/swTextOverlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minWidth="48dp"
+                        android:minHeight="48dp"
+                        android:padding="10dp"
+                        android:text="@string/txt_description"
+                        android:theme="@style/SCBSwitch"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:id="@+id/spDescPosition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:entries="@array/descriptionPosition"
+                        android:padding="10dp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swGuideBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@null"
-                android:text="@string/txt_apply"
-                android:textColor="@color/black" />
+                android:padding="10dp"
+                android:text="@string/txt_guide_box"
+                android:theme="@style/SCBSwitch"
+                android:visibility="gone"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spAspectRatio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/aspectRatio"
+                android:padding="10dp"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnReset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@null"
+                    android:text="Reset"
+                    android:textColor="@color/black" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnApply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@null"
+                    android:text="@string/txt_apply"
+                    android:textColor="@color/black" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
+    </androidx.core.widget.NestedScrollView>
 </androidx.appcompat.widget.LinearLayoutCompat>
