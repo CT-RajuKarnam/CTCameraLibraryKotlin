@@ -1,0 +1,206 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".CameraFragment">
+
+
+    <FrameLayout
+        android:id="@+id/cameraWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/cameraView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/selfie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/tvLatLng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#51000000"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+                app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
+                tools:text="TEsting lat" />
+
+            <TextView
+                android:id="@+id/titleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>.
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/captureLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10sp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:orientation="vertical"
+        tools:ignore="RelativeOverlap">
+
+        <ImageView
+            android:id="@+id/btnFlash"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_flash_off"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/rotateCameraImg"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"
+            android:padding="10dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/captureImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"
+            android:padding="10dp"
+            android:src="@drawable/ic_camera"
+            app:tint="@color/white" />
+
+
+        <TextView
+            android:id="@+id/tvZoomLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="-10dp"
+            android:text="1.0x"
+            android:textColor="@color/white" />
+
+        <com.ct.mycameralibray.VerticalSeekBar
+            android:id="@+id/verticalSeekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/imgSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"
+            android:padding="10dp"
+            android:src="@drawable/ic_settings"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnRetake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/holo_red_dark"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="ReTake"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnSaveAndClose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="Save &amp; Close"
+            android:textColor="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnSaveAndNext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/holo_red_dark"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="Save &amp; Next"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</RelativeLayout>
