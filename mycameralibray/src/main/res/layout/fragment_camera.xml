@@ -9,7 +9,8 @@
     <FrameLayout
         android:id="@+id/cameraWrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="ExtraText">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint"
@@ -119,11 +120,11 @@
 
         <ImageView
             android:id="@+id/img_overlay"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="192dp"
+            android:layout_height="192dp"
             android:src="@mipmap/overlayicon"
             android:layout_gravity="center"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/txt_title"
@@ -131,7 +132,7 @@
             android:layout_height="match_parent"
             android:padding="10dp"
             android:gravity="center_horizontal"
-            android:text="Title/ Image Lable Name"
+            tools:text="Title/ Image Lable Name"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="18sp"
             android:textStyle="bold" />

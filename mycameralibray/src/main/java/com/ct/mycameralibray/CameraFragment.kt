@@ -15,11 +15,13 @@ import android.location.LocationRequest
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.*
+import android.text.Html
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.ct.mycameralibray.*
 import com.ct.mycameralibray.databinding.FragmentCameraBinding
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -273,7 +276,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 e.printStackTrace()
             }
 
-            Toast.makeText(binding.root.context, oldUri?.path.toString(), Toast.LENGTH_SHORT).show()
+            // Toast.makeText(binding.root.context, oldUri?.path.toString(), Toast.LENGTH_SHORT).show()
         }
 
         if (imageCount == doneClose()) {
@@ -483,6 +486,25 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             }, 0)
         }
 
+
+
+        if (imagesList[imageCount].imgOverlayLogo.isNotEmpty()) {
+            Log.e("@####","OverLy"+imagesList[imageCount].imgOverlayLogo)
+            binding.imgOverlay.visibility = View.VISIBLE
+            Glide.with(this)
+                .load(imagesList[imageCount].imgOverlayLogo)
+                .centerCrop()
+                .into(binding.imgOverlay)
+        } else {
+            Log.e("######","OverLy"+imagesList[imageCount].imgOverlayLogo)
+            binding.imgOverlay.visibility = View.GONE
+        }
+        binding.imgOverlay.visibility = View.VISIBLE
+        binding.imgOverlay.setImageURI(Uri.parse(imagesList[imageCount].imgOverlayLogo))
+        Log.e("$$$","OverLy"+imagesList[imageCount].imgOverlayLogo)
+        val title_name = imagesList[imageCount].imgName
+        val title = "Please capture: <font color='#0076BA'>$title_name</font>"
+        binding.txtTitle.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE)
         binding.captureLayout.visibility = View.VISIBLE
     }
 
