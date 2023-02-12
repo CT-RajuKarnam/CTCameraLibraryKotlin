@@ -16,6 +16,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.ct.ctcameralib.databinding.ActivityImagesBinding
 import com.ct.ctcameralib.databinding.LayoutImageTagsBinding
+import com.ct.mycameralibray.CamPref
 import com.ct.mycameralibray.ImageTags
 import com.google.gson.Gson
 import org.json.JSONException
@@ -31,7 +32,7 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
         super.onCreate(savedInstanceState)
         binding = ActivityImagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val camFrag = CameraFragment;
+        val camFrag = CameraFragment
         camFrag.setCamListImages(this)
         binding.lvImgTags.adapter = Pictures(imagesList)
         loadData()
@@ -74,7 +75,7 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
                 val intent = Intent(this@ImagesActivity, CameraActivity::class.java)
                 intent.putExtra("images_list", imagesList)
                 intent.putExtra("position", position)
-                startActivity(intent, )
+                startActivity(intent)
             }
 
         }
@@ -110,19 +111,41 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
                 imagesList?.add(Gson().fromJson(images[i].toString(), ImageTags::class.java))
             }
             binding.lvImgTags.adapter?.notifyDataSetChanged()
+
+            val jObj = jsonObject.getJSONObject("CamSettings")
+            CamPref.getIn(this).isCamShowWaterMark = jObj.getBoolean("camShowWaterMark")
+            CamPref.getIn(this).camShowWaterMarkAt = jObj.getString("camShowWaterMarkAt")
+            CamPref.getIn(this).camWaterMarkUrl = jObj.getString("camWaterMarkUrl")
+            CamPref.getIn(this).isCamShowAddress = jObj.getBoolean("camShowAddress")
+            CamPref.getIn(this).isCamShowLatLong = jObj.getBoolean("camShowLatLong")
+            CamPref.getIn(this).isCamShowOverlayImg = jObj.getBoolean("camShowOverlayImg")
+            CamPref.getIn(this).isCamShowTime = jObj.getBoolean("camShowTime")
+            CamPref.getIn(this).isCamShowLabelName = jObj.getBoolean("camShowLabelName")
+            CamPref.getIn(this).isCamShowGuidBox = jObj.getBoolean("camShowGuidBox")
+            CamPref.getIn(this).isCamShowGuidLines = jObj.getBoolean("camShowGuidLines")
+            CamPref.getIn(this).camShowTextAt = jObj.getString("camShowTextAt")
+            CamPref.getIn(this).camFlashMode = jObj.getString("camFlashMode")
+            CamPref.getIn(this).camAspectRatio = jObj.getString("camAspectRatio")
+            CamPref.getIn(this).isCamSavePicExternal = jObj.getBoolean("camSavePicExternal")
+            CamPref.getIn(this).camFolderName = jObj.getString("camFolderName")
+            CamPref.getIn(this).camOriRegixL = jObj.getString("camOriRegixL")
+            CamPref.getIn(this).camOriRegixP = jObj.getString("camOriRegixP")
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-    }
 
+
+
+
+}
 
 
     override fun myCamListImages(myCameraImages: ArrayList<ImageTags>) {
         imagesList?.clear()
-        imagesList = myCameraImages;
+        imagesList = myCameraImages
         binding.lvImgTags.adapter = Pictures(imagesList)
-        Log.e("####", "Camera Images@" + imagesList!!.get(0).imgPath);
-        Log.e("####", "Camera Images#" + imagesList!!.get(0).imgName);
+        Log.e("####", "Camera Images@" + imagesList!!.get(0).imgPath)
+        Log.e("####", "Camera Images#" + imagesList!!.get(0).imgName)
     }
 
 }
