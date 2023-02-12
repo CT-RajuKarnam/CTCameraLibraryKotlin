@@ -85,6 +85,7 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         swWatermark!!.isChecked = CamPref.getIn(requireContext()).isCamShowWaterMark
+
         swAddress!!.isChecked = CamPref.getIn(requireContext()).isCamShowAddress
         swLatLng!!.isChecked = CamPref.getIn(requireContext()).isCamShowLatLong
         swTime!!.isChecked = CamPref.getIn(requireContext()).isCamShowTime
@@ -217,13 +218,13 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
         spWatermarkPosition!!.adapter = adapter
         spTextAt!!.adapter = adapter1
         spAspectRatio!!.adapter = adapter2
-        /*for (i in 1 until watermarkPosition.size) {
+        for (i in 1 until watermarkPosition.size) {
             watermark = CamPref.getIn(requireContext()).camShowWaterMarkAt
             if (watermarkPosition[i] == watermark) {
                 watermarkStatePosition = watermarkPosition[i]
                 spWatermarkPosition!!.setSelection(i)
             }
-        }*/
+        }
         for (j in 1 until descPosition.size) {
             desc = CamPref.getIn(requireContext()).camDescValue
             if (descPosition[j] == desc) {
@@ -271,8 +272,9 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
                             Gravity.BOTTOM or Gravity.RIGHT
                         CamPref.getIn(requireContext()).camShowWaterMarkAt = "Bottom-right"
                     } else {
-                        CamPref.getIn(requireContext()).camShowWaterMarkAtPos = 0
-                        CamPref.getIn(requireContext()).camShowWaterMarkAt = "Top-Left"
+                        CamPref.getIn(requireContext()).camShowWaterMarkAtPos =
+                            Gravity.BOTTOM or Gravity.LEFT
+                        CamPref.getIn(requireContext()).camShowWaterMarkAt = "Bottom-Left"
                     }
                 }
             }

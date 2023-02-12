@@ -79,20 +79,21 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
     var myListener: MyListener? = null
 
-    lateinit var appLocationService: AppLocationService
+    var appLocationService: AppLocationService? = null
 
     companion object Ratio {
         var camImages: CamImages? = null;
         var camListImages: CamListImages? = null;
+
         @JvmName("setCamImages1")
-        fun setCamImages(cameraImages:CamImages) {
-             camImages = cameraImages;
-        }
-        @JvmName("setCamListImages1")
-        fun setCamListImages(cameraListImages:CamListImages) {
-            camListImages = cameraListImages;
+        fun setCamImages(cameraImages: CamImages) {
+            camImages = cameraImages;
         }
 
+        @JvmName("setCamListImages1")
+        fun setCamListImages(cameraListImages: CamListImages) {
+            camListImages = cameraListImages;
+        }
 
 
         var ASPECT_RATIO: Double = 0.0
@@ -103,7 +104,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     }
 
     interface CamImages {
-        fun myCamImages(myCameraImages: ArrayList<ImageTags>,pos:Int)
+        fun myCamImages(myCameraImages: ArrayList<ImageTags>, pos: Int)
     }
 
 
@@ -186,7 +187,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
                 try {
-                    val bitmap:Bitmap = binding.cameraView.bitmap!!
+                    val bitmap: Bitmap = binding.cameraView.bitmap!!
 
                     /*by ram*/
                     val fl_view = binding.flView
@@ -296,8 +297,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 Log.d("TAG", "getFilePath1: ${oldUri?.path}")
                 imagesList[imageCount].imgPath = oldUri?.path
                 try {
-                    camImages?.myCamImages(imagesList,skipImages())
-                   // requireActivity().finish()
+                    camImages?.myCamImages(imagesList, skipImages())
+                    // requireActivity().finish()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -325,15 +326,18 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                         }
 
                         if (CamPref.getIn(binding.root.context).isCamShowLatLong) {
-                            if(appLocationService.getLocation()!=null)
-                                desc = desc + "\nLat: " + twoDecimalForm.format(appLocationService.getLatitude())+", Lng:"+twoDecimalForm.format(appLocationService.getLongitude());
+                            if (appLocationService!!.getLocation() != null)
+                                desc =
+                                    desc + "\nLat: " + twoDecimalForm.format(appLocationService!!.getLatitude()) + ", Lng:" + twoDecimalForm.format(
+                                        appLocationService!!.getLongitude()
+                                    );
                         }
                         if (CamPref.getIn(binding.root.context).isCamShowAddress) {
-                            if(appLocationService.getLocation()!=null)
-                                desc = desc + "\nAddress: " + appLocationService.getAddress();
+                            if (appLocationService!!.getLocation() != null)
+                                desc = desc + "\nAddress: " + appLocationService!!.getAddress();
                         }
                         binding.txtTimeStamp.setText(desc)
-                     }
+                    }
                 })
             }
         }, 1000, 1000)
@@ -890,22 +894,23 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
         /*water mark position*/
         if (CamPref.getIn(binding.root.context).isCamShowWaterMark) {
-            binding.watermarkLogo.visibility= View.VISIBLE
+            binding.watermarkLogo.visibility = View.VISIBLE
             val params = binding.watermarkLogo.getLayoutParams() as FrameLayout.LayoutParams
             params.gravity = CamPref.getIn(binding.root.context).camShowWaterMarkAtPos
             binding.watermarkLogo.layoutParams = params
-        }else{
-            binding.watermarkLogo.visibility= View.GONE
+        } else {
+            binding.watermarkLogo.visibility = View.GONE
         }
 
         /*Text overlay*/
         if (CamPref.getIn(binding.root.context).isCamShowTime || CamPref.getIn(binding.root.context).isCamShowAddress ||
-            CamPref.getIn(binding.root.context).isCamShowLatLong) {
-            binding.txtTimeStamp.visibility= View.VISIBLE
+            CamPref.getIn(binding.root.context).isCamShowLatLong
+        ) {
+            binding.txtTimeStamp.visibility = View.VISIBLE
             binding.txtTimeStamp.gravity = CamPref.getIn(binding.root.context).camDescPosition
 
         } else {
-            binding.txtTimeStamp.visibility= View.GONE
+            binding.txtTimeStamp.visibility = View.GONE
         }
     }
 

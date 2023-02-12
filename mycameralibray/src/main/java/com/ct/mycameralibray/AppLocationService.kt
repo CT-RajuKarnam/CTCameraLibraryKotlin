@@ -27,7 +27,7 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
      */
     // flag for GPS status
     var isLocationAvailable = false
-    lateinit var location: Location // location
+    var location: Location? = null // location
 
     var latitude = 0.0 // latitude
     var longitude = 0.0 // longitude
@@ -59,23 +59,24 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
                     MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this
                 )
                 if (locationManager != null) {
-                    location = locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)!!
+                    location =
+                        locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)!!
                     if (location != null) {
-                        latitude = location.latitude
-                        longitude = location.longitude
+                        latitude = location!!.latitude
+                        longitude = location!!.longitude
                     }
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return location
+        return location!!
     }
 
     @JvmName("getLatitude1")
     fun getLatitude(): Double {
         if (location != null) {
-            latitude = location.latitude
+            latitude = location!!.latitude
         }
         return latitude
     }
@@ -83,7 +84,7 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
     @JvmName("getLongitude1")
     fun getLongitude(): Double {
         if (location != null) {
-            longitude = location.longitude
+            longitude = location!!.longitude
         }
         return longitude
     }// If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
@@ -95,8 +96,8 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
         val addresses: List<Address>?
         geocoder = Geocoder(mContext, Locale.getDefault())
         addresses = geocoder.getFromLocation(
-            location.latitude,
-            location.longitude,
+            location!!.latitude,
+            location!!.longitude,
             1
         ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         val address =
@@ -117,8 +118,8 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
             val addresses: List<Address>
             geocoder = Geocoder(mContext, Locale.getDefault())
             addresses = geocoder.getFromLocation(
-                location.latitude,
-                location.longitude,
+                location!!.latitude,
+                location!!.longitude,
                 1
             )!! // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             val address =
