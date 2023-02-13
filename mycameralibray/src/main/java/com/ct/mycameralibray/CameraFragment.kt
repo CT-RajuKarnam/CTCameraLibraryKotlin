@@ -17,6 +17,7 @@ import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -24,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.core.Camera
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -212,7 +214,12 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                     e.printStackTrace()
                 }
             } else {
-                binding.titleName.visibility = View.VISIBLE
+                if (CamPref.getIn(binding.root.context).isCamShowLabelName) {
+                    binding.txtTitle.visibility = View.VISIBLE
+
+                } else {
+                    binding.txtTitle.visibility = View.GONE
+                }
                 if (CamPref.getIn(binding.root.context).orientationFlag) {
                     showToast("Please capture photo in landscape only", toastAngle)
                 } else {
@@ -226,7 +233,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             binding.linearLayout.visibility = View.GONE
             binding.cameraView.visibility = View.VISIBLE
             binding.captureLayout.visibility = View.VISIBLE
-            binding.titleName.visibility = View.VISIBLE
+            binding.flView.visibility = View.VISIBLE
+            binding.flViewHide.visibility = View.VISIBLE
             binding.selfie.visibility = View.GONE
             oldUri = null
             startCamera()
@@ -327,8 +335,17 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(binding.root.context)
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3).build()
-                .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }
+            /*val preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3).build()
+                .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }*/
+            var preview: Preview? = null;
+            if(CamPref.getIn(context).camAspectRatio.equals("3:4")){
+                preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3).build()
+                    .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }
+                    .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }
+            }else{
+                preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_16_9).build()
+                    .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }
+            }
 
             imageCapture = ImageCapture.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3)
                 .setFlashMode(ImageCapture.FLASH_MODE_OFF)
@@ -480,22 +497,40 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
 
 
-        if (imagesList[imageCount].imgOverlayLogo.isNotEmpty()) {
+        if (imagesList[imageCount].imgOverlayLogo.isNotEmpty() && CamPref.getIn(binding.root.context).isCamShowOverlayImg) {
             Log.e("@####", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.VISIBLE
             Glide.with(this)
                 .load(imagesList[imageCount].imgOverlayLogo)
-                .centerCrop()
                 .into(binding.imgOverlay)
         } else {
             Log.e("######", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.GONE
         }
-        binding.imgOverlay.visibility = View.VISIBLE
-        binding.imgOverlay.setImageURI(Uri.parse(imagesList[imageCount].imgOverlayLogo))
-        Log.e("$$$", "OverLy" + imagesList[imageCount].imgOverlayLogo)
+
+        if (CamPref.getIn(binding.root.context).camWaterMarkUrl.isNotEmpty() && CamPref.getIn(binding.root.context).isCamShowWaterMark) {
+            binding.watermarkLogo.visibility = View.VISIBLE
+            Glide.with(this)
+                .load(CamPref.getIn(binding.root.context).camWaterMarkUrl)
+                .into(binding.watermarkLogo)
+        } else {
+            Log.e("######", "OverLy" + imagesList[imageCount].imgOverlayLogo)
+            binding.watermarkLogo.visibility = View.GONE
+        }
+
+        //binding.imgOverlay.visibility = View.VISIBLE
+        //binding.imgOverlay.setImageURI(Uri.parse(imagesList[imageCount].imgOverlayLogo))
+        //Log.e("$$$", "OverLy" + imagesList[imageCount].imgOverlayLogo)
         binding.txtTitle.text = imagesList[imageCount].imgName
         binding.captureLayout.visibility = View.VISIBLE
+
+        Handler(Looper.myLooper()!!).postDelayed({
+            val fl_params = binding.flView.getLayoutParams() as RelativeLayout.LayoutParams
+            fl_params.width = binding.cameraView.measuredWidth
+            fl_params.height = binding.cameraView.measuredHeight
+            fl_params.addRule(RelativeLayout.CENTER_IN_PARENT)
+            binding.flView.layoutParams = fl_params
+        }, 300)
     }
 
 
@@ -908,7 +943,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     }
 
     override fun applyListener() {
-
+        startCamera()
         /*water mark position*/
         if (CamPref.getIn(binding.root.context).isCamShowWaterMark) {
             binding.watermarkLogo.visibility = View.VISIBLE
@@ -929,6 +964,17 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         } else {
             binding.txtTimeStamp.visibility = View.GONE
         }
+
+
+        if (CamPref.getIn(binding.root.context).isCamShowLabelName) {
+            binding.txtTitle.visibility = View.VISIBLE
+
+        } else {
+            binding.txtTitle.visibility = View.GONE
+        }
+
+
+
     }
 
     fun copyBitmap(src: Bitmap): Bitmap {

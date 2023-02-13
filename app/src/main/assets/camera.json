@@ -1,7 +1,7 @@
 {
   "CamSettings": {
     "camShowWaterMark": true,
-    "camWaterMarkUrl": "",
+    "camWaterMarkUrl": "https://testlb.cartradeexchange.com/images/logo.png",
     "camShowAddress": true,
     "camShowLatLong": true,
     "camShowOverlayImg": true,
@@ -61,7 +61,7 @@
       "imgName": "Speedometer",
       "imgMand": "y",
       "imgOverlayLogo": "https://static.cartradeexchange.com/ref_img_logs/23_speedometer_1585379164.png",
-      "imgOrientation": "P",
+      "imgOrientation": "L",
       "imgGuidlineText": "",
       "imgSkipTime": "",
       "imgLat": "",
