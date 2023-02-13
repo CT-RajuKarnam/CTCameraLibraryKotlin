@@ -96,6 +96,7 @@
             android:layout_height="100dp"
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"
+            tools:visibility="gone"
             android:src="@mipmap/ic_launcher" />
 
 
@@ -153,10 +154,22 @@
             android:id="@+id/imgSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center_vertical"
             android:contentDescription="@string/app_name"
             android:padding="10dp"
+            android:layout_weight="0.5"
             android:src="@drawable/ic_settings" />
+
+        <ImageView
+            android:id="@+id/captureImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/app_name"
+            android:padding="10dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_camera" />
+
 
         <ImageView
             android:id="@+id/btnFlash"
@@ -164,6 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="10dp"
+            android:layout_weight="0.5"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_flash_off" />
 
@@ -177,33 +191,25 @@
             android:visibility="gone"
             android:src="@drawable/ic_camera_switch" />
 
-
-        <ImageView
-            android:id="@+id/captureImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:contentDescription="@string/app_name"
-            android:padding="10dp"
-            android:src="@drawable/ic_camera" />
-
-
         <TextView
             android:id="@+id/tvZoomLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="1.0x"
+            android:visibility="gone"
             android:textColor="@color/white" />
 
-        <com.ct.mycameralibray.VerticalSeekBar
-            android:id="@+id/verticalSeekbar"
+        <SeekBar
+            android:id="@+id/horizontalSeekbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:thumbTint="@color/white"
+            android:progressTint="@color/white"
             android:layout_marginBottom="2dp"
-            android:layout_weight="1" />
+            android:visibility="gone"
+            android:layout_weight="2" />
 
 
     </LinearLayout>

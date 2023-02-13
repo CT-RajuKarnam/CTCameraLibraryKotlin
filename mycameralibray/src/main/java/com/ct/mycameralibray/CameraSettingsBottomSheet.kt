@@ -218,6 +218,7 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
         spWatermarkPosition!!.adapter = adapter
         spTextAt!!.adapter = adapter1
         spAspectRatio!!.adapter = adapter2
+
         for (i in 1 until watermarkPosition.size) {
             watermark = CamPref.getIn(requireContext()).camShowWaterMarkAt
             if (watermarkPosition[i] == watermark) {
@@ -226,7 +227,7 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
             }
         }
         for (j in 1 until descPosition.size) {
-            desc = CamPref.getIn(requireContext()).camDescValue
+            desc = CamPref.getIn(requireContext()).camShowTextAt
             if (descPosition[j] == desc) {
                 descStatePosition = descPosition[j]
                 spTextAt!!.setSelection(j)

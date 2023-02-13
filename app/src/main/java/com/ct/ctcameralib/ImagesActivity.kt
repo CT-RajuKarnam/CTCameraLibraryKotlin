@@ -38,7 +38,6 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
         binding.lvImgTags.adapter = Pictures(imagesList)
         loadData()
 
-        Log.e("imagesList", Gson().toJson(CameraFragment.camImagesModel))
     }
 
     @SuppressLint("ViewHolder")

@@ -10,7 +10,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.location.LocationRequest
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.*
@@ -31,8 +30,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.ct.mycameralibray.*
 import com.ct.mycameralibray.databinding.FragmentCameraBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -135,7 +132,6 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         if (allPermissionsGranted()) {
             startSensor()
             Log.e("####","Start Camera @L ")
-
             startCamera()
         } else {
             startSensor()
@@ -408,29 +404,57 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         }
 
         //pitch to zoom
-/*        val scaleGestureDetector = ScaleGestureDetector(this, listener)
+        val scaleGestureDetector = ScaleGestureDetector(binding.root.context, listener)
         binding.cameraView.setOnTouchListener { _, event ->
             scaleGestureDetector.onTouchEvent(event)
             return@setOnTouchListener true
-        }*/
+        }
 
         //zoom seekbar
-        binding.verticalSeekbar.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
-            @SuppressLint("SetTextI18n")
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                camera!!.cameraControl.setLinearZoom(progress.toFloat() / seekBar!!.max)
-                val zoomRatio = progress.toFloat() / seekBar.max
-                val df = DecimalFormat("#.#")
-                var zoomval = "" + df.format(zoomRatio.toDouble())
-                zoomval = if (zoomval.length == 1) "$zoomval.0" else zoomval
-                binding.tvZoomLevel.text = "$zoomval x"
-            }
+        if(imagesList[imageCount].imgOrientation.equals("P",true)) {
+            binding.horizontalSeekbar?.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                @SuppressLint("SetTextI18n")
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    camera!!.cameraControl.setLinearZoom(progress.toFloat() / seekBar!!.max)
+                    val zoomRatio = progress.toFloat() / seekBar.max
+                    val df = DecimalFormat("#.#")
+                    var zoomval = "" + df.format(zoomRatio.toDouble())
+                    zoomval = if (zoomval.length == 1) "$zoomval.0" else zoomval
+                    binding.tvZoomLevel.text = "$zoomval x"
+                }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+        } else if(imagesList[imageCount].imgOrientation.equals("L",true)){
+            binding.verticalSeekbar?.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                @SuppressLint("SetTextI18n")
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    camera!!.cameraControl.setLinearZoom(progress.toFloat() / seekBar!!.max)
+                    val zoomRatio = progress.toFloat() / seekBar.max
+                    val df = DecimalFormat("#.#")
+                    var zoomval = "" + df.format(zoomRatio.toDouble())
+                    zoomval = if (zoomval.length == 1) "$zoomval.0" else zoomval
+                    binding.tvZoomLevel.text = "$zoomval x"
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
+        }
 
         //Flash check
         if (CamPref.getIn(binding.root.context).camFlashMode == "off") {
@@ -474,6 +498,14 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         binding.captureLayout.visibility = View.VISIBLE
     }
 
+
+    private val listener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+            val scale = camera?.cameraInfo?.zoomState?.value?.zoomRatio!! * detector.scaleFactor
+            camera?.cameraControl?.setZoomRatio(scale)
+            return true
+        }
+    }
     private fun captureView(view: View, window: Window, bitmapCallback: (Bitmap) -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Above Android O, use PixelCopy
