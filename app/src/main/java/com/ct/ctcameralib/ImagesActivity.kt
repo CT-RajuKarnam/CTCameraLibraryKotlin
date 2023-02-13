@@ -1,9 +1,12 @@
 package com.ct.ctcameralib
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ct.ctcameralib.databinding.ActivityImagesBinding
 import com.ct.ctcameralib.databinding.LayoutImageTagsBinding
@@ -36,7 +42,22 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
         val camFrag = CameraFragment
         camFrag.setCamListImages(this)
         binding.lvImgTags.adapter = Pictures(imagesList)
-        loadData()
+        if (allPermissionsGranted()) {
+            loadData()
+        } else {
+            ActivityCompat.requestPermissions(
+               this@ImagesActivity,
+                mutableListOf(Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,).apply {
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                        add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    }
+                }.toTypedArray(),
+                1001
+            )
+
+        }
 
     }
 
@@ -136,10 +157,22 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
             e.printStackTrace()
         }
 
+    }
 
-
-
-}
+    private fun allPermissionsGranted() = mutableListOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+    ).apply {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+    }.toTypedArray().all {
+        ContextCompat.checkSelfPermission(
+            binding.root.context,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
 
     override fun myCamListImages(myCameraImages: ArrayList<ImageTags>) {
@@ -148,6 +181,24 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
         binding.lvImgTags.adapter = Pictures(imagesList)
         Log.e("####", "Camera Images@" + imagesList!!.get(0).imgPath)
         Log.e("####", "Camera Images#" + imagesList!!.get(0).imgName)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001) {
+            if (allPermissionsGranted()) {
+                loadData()
+            } else {
+                Toast.makeText(binding.root.context, "permission not granted", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+
+
     }
 
 }

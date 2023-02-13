@@ -216,5 +216,14 @@ public class CamPref {
         editor.clear().apply();
     }
 
+    public void setCamSwitch(String value){
+        editor.putString("switchCamera",value);
+        editor.apply();
+    }
+
+    public String getCamSwitch(){
+        return pref.getString("switchCamera", "back");
+    }
+
 }
 

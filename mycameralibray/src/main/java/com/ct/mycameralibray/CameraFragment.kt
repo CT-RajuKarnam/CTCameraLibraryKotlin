@@ -61,6 +61,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     var z = 0
     private var mLastClickTime: Long = 0
     private var toastAngle: Int = 0
+    var cameraSelector: CameraSelector? = null
 
     var accelerometer: Sensor? = null
     var sm: SensorManager? = null
@@ -341,9 +342,9 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             }
 
             //front camera and flash off
-            val cameraSelector: CameraSelector?
             if (imagesList[imageCount].imgName.contains("Selfie")) {
                 cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+//                CamPref.getIn(binding.root.context).camSwitch = "front"
                 if (camera?.cameraInfo?.hasFlashUnit() == true) {
                     binding.btnFlash.visibility = View.VISIBLE
                 } else {
@@ -351,12 +352,13 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 }
             } else {
                 cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+//                CamPref.getIn(binding.root.context).camSwitch = "back"
             }
             try {
                 cameraProvider.unbindAll()
                 camera = cameraProvider.bindToLifecycle(
                     this,
-                    cameraSelector,
+                    cameraSelector!!,
                     preview,
                     imageCapture,
                     imageAnalyzer
@@ -366,6 +368,17 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             }
         }, ContextCompat.getMainExecutor(binding.root.context))
 
+
+        //rotateCamera
+       /* binding.rotateCameraImg.setOnClickListener {
+            if(CamPref.getIn(binding.root.context).camSwitch == "front"){
+                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                CamPref.getIn(binding.root.context).camSwitch = "back"
+            } else if(CamPref.getIn(binding.root.context).camSwitch == "back"){
+                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                CamPref.getIn(binding.root.context).camSwitch = "front"
+            }
+        }*/
 
         //flash
         binding.btnFlash.setOnClickListener {

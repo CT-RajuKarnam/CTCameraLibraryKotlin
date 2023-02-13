@@ -161,6 +161,18 @@
             android:src="@drawable/ic_settings" />
 
         <ImageView
+            android:id="@+id/rotateCameraImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/app_name"
+            android:padding="10dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:src="@drawable/ic_camera_switch" />
+
+
+        <ImageView
             android:id="@+id/captureImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -181,15 +193,6 @@
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_flash_off" />
 
-        <ImageView
-            android:id="@+id/rotateCameraImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="@string/app_name"
-            android:padding="10dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_camera_switch" />
 
         <TextView
             android:id="@+id/tvZoomLevel"

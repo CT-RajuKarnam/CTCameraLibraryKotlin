@@ -153,22 +153,24 @@
         <ImageView
             android:id="@+id/btnFlash"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:contentDescription="@string/app_name"
+            android:padding="10dp"
             android:src="@drawable/ic_flash_off"
             app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/rotateCameraImg"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:contentDescription="@string/app_name"
             android:padding="10dp"
             android:visibility="gone"
+            android:src="@drawable/ic_camera_switch"
             app:tint="@color/white" />
 
         <ImageView
@@ -190,9 +192,9 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="-10dp"
-            android:visibility="gone"
             android:text="1.0x"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone" />
 
         <com.ct.mycameralibray.VerticalSeekBar
             android:id="@+id/verticalSeekbar"
