@@ -1,10 +1,9 @@
-package com.ct.ctcameralib
+package com.ct.mycameralibray
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.hardware.Sensor
@@ -15,13 +14,11 @@ import android.location.LocationRequest
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.*
-import android.text.Html
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.SeekBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -68,15 +65,6 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     private var mLastClickTime: Long = 0
     private var toastAngle: Int = 0
 
-    private val locationRequest: LocationRequest? = null
-    var locationCallback: LocationCallback? = null
-    var mFusedLocationClient: FusedLocationProviderClient? = null
-    var appLatitude = 0.0 // latitude
-
-    var appLongitude = 0.0 // longitude
-
-    var appDateTime = ""
-
     var accelerometer: Sensor? = null
     var sm: SensorManager? = null
 
@@ -84,22 +72,23 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
     var appLocationService: AppLocationService? = null
 
+
     companion object Ratio {
-        var camImages: CamImages? = null;
-        var camListImages: CamListImages? = null;
+        var camImages: CamImages? = null
+        var camListImages: CamListImages? = null
 
         @JvmName("setCamImages1")
         fun setCamImages(cameraImages: CamImages) {
-            camImages = cameraImages;
+            camImages = cameraImages
         }
 
         @JvmName("setCamListImages1")
         fun setCamListImages(cameraListImages: CamListImages) {
-            camListImages = cameraListImages;
+            camListImages = cameraListImages
         }
 
-
         var ASPECT_RATIO: Double = 0.0
+
     }
 
     interface CamListImages {
@@ -121,6 +110,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        imageCount = arguments?.getInt("position")!!
+        imagesList = arguments?.getSerializable("images_list") as ArrayList<ImageTags>
         binding = FragmentCameraBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -128,28 +119,23 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appLocationService = AppLocationService(binding.root.context);
-
-
-        imageCount = arguments?.getInt("position")!!
-        imagesList = arguments?.getSerializable("images_list") as ArrayList<ImageTags>
-
+        appLocationService = AppLocationService(binding.root.context)
         myListener = this
 
         //Aspect Ratio
         if (imagesList[imageCount].imgOrientation.equals("P")) {
             CamPref.getIn(binding.root.context).orientationFlag = false
             ASPECT_RATIO = 3.0 / 4.0
-            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         } else {
             CamPref.getIn(binding.root.context).orientationFlag = true
             ASPECT_RATIO = 4.0 / 3.0
-            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
         //enable permissions for camera
         if (allPermissionsGranted()) {
             startSensor()
+            Log.e("####","Start Camera @L ")
+
             startCamera()
         } else {
             startSensor()
@@ -166,10 +152,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         }
 
         binding.imgSettings.setOnClickListener {
-            /* val intent = Intent(binding.root.context, BottomSheetViewActivity::class.java)
-             startActivity(intent)*/
             val bottomSheet = CameraSettingsBottomSheet(myListener!!)
-            bottomSheet.show(requireActivity().getSupportFragmentManager(), "CameraBottomSheet")
+            bottomSheet.show(requireActivity().supportFragmentManager, "CameraBottomSheet")
         }
 
         //capture image
@@ -198,20 +182,18 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                     val bitmapNew: Bitmap = copyBitmap(bitmap)
                     val canvas = Canvas(bitmapNew)
                     canvas.drawARGB(0, 0, 0, 0)
-                    fl_view.setDrawingCacheEnabled(true)
+                    fl_view.isDrawingCacheEnabled = true
                     fl_view.measure(
                         View.MeasureSpec.makeMeasureSpec(canvas.width, View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(canvas.height, View.MeasureSpec.EXACTLY)
                     )
-                    fl_view.layout(0, 0, fl_view.getMeasuredWidth(), fl_view.getMeasuredHeight())
+                    fl_view.layout(0, 0, fl_view.measuredWidth, fl_view.measuredHeight)
                     fl_view.draw(canvas)
 
 
                     /*end by ram*/
 
                     binding.selfie.setImageBitmap(bitmapNew)
-
-
 
                     binding.selfie.visibility = View.VISIBLE
                     cameraExecutor.shutdown()
@@ -259,24 +241,11 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
             imagesList[imageCount].imgPath = oldUri?.path
             try {
-/*                val imgLists = object : com.ct.mycameralibray.MyImageList {
-                    override fun myImageList(imgList: ArrayList<ImageTags>) {
-                        for (i in imageCount until imagesList.size) {
-                            imgList.add(imagesList.get(i))
-                        }
-                    }
-                }*/
                 camListImages?.myCamListImages(imagesList)
-                /*val resultIntent = Intent(binding.root.context, ImagesActivity::class.java)
-                resultIntent.putExtra("from","camera")
-                resultIntent.putExtra("images_list", imagesList)
-                startActivity(resultIntent)*/
                 requireActivity().finish()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
-            // Toast.makeText(binding.root.context, oldUri?.path.toString(), Toast.LENGTH_SHORT).show()
         }
 
         if (imageCount == doneClose()) {
@@ -301,7 +270,6 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 imagesList[imageCount].imgPath = oldUri?.path
                 try {
                     camImages?.myCamImages(imagesList, skipImages())
-                    // requireActivity().finish()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -325,7 +293,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                     if (binding.txtTimeStamp != null) {
                         var desc = ""
                         if (CamPref.getIn(binding.root.context).isCamShowTime) {
-                            desc = DateFormat.format("dd-MM-yyyy HH:mm:ss", Date()).toString();
+                            desc = DateFormat.format("dd-MM-yyyy HH:mm:ss", Date()).toString()
                         }
 
                         if (CamPref.getIn(binding.root.context).isCamShowLatLong) {
@@ -333,13 +301,13 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                                 desc =
                                     desc + "\nLat: " + twoDecimalForm.format(appLocationService!!.getLatitude()) + ", Lng:" + twoDecimalForm.format(
                                         appLocationService!!.getLongitude()
-                                    );
+                                    )
                         }
                         if (CamPref.getIn(binding.root.context).isCamShowAddress) {
                             if (appLocationService!!.getLocation() != null)
-                                desc = desc + "\nAddress: " + appLocationService!!.getAddress();
+                                desc = desc + "\nAddress: " + appLocationService!!.getAddress()
                         }
-                        binding.txtTimeStamp.setText(desc)
+                        binding.txtTimeStamp.text = desc
                     }
                 })
             }
@@ -409,10 +377,10 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 binding.btnFlash.visibility = View.VISIBLE
                 camera?.cameraControl?.enableTorch(camera?.cameraInfo?.torchState?.value == TorchState.OFF)
                 if (camera?.cameraInfo?.torchState?.value == TorchState.OFF) {
-                    binding.btnFlash.setImageResource(com.ct.mycameralibray.R.drawable.ic_flash_off)
+                    binding.btnFlash.setImageResource(R.drawable.ic_flash_off)
                     CamPref.getIn(binding.root.context).camFlashMode = "off"
                 } else if (camera?.cameraInfo?.torchState?.value == TorchState.ON) {
-                    binding.btnFlash.setImageResource(com.ct.mycameralibray.R.drawable.ic_flash_on)
+                    binding.btnFlash.setImageResource(R.drawable.ic_flash_on)
                     CamPref.getIn(binding.root.context).camFlashMode = "on"
                 }
             } else {
@@ -470,7 +438,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 if (camera?.cameraInfo?.hasFlashUnit() == true) {
                     binding.btnFlash.visibility = View.VISIBLE
                     camera?.cameraControl?.enableTorch(false)
-                    binding.btnFlash.setImageResource(com.ct.mycameralibray.R.drawable.ic_flash_off)
+                    binding.btnFlash.setImageResource(R.drawable.ic_flash_off)
                 }
             }, 0)
 
@@ -480,7 +448,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 if (camera?.cameraInfo?.hasFlashUnit() == true) {
                     binding.btnFlash.visibility = View.VISIBLE
                     camera?.cameraControl?.enableTorch(true)
-                    binding.btnFlash.setImageResource(com.ct.mycameralibray.R.drawable.ic_flash_on)
+                    binding.btnFlash.setImageResource(R.drawable.ic_flash_on)
                 }
 
             }, 0)
@@ -489,22 +457,20 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
 
         if (imagesList[imageCount].imgOverlayLogo.isNotEmpty()) {
-            Log.e("@####","OverLy"+imagesList[imageCount].imgOverlayLogo)
+            Log.e("@####", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.VISIBLE
             Glide.with(this)
                 .load(imagesList[imageCount].imgOverlayLogo)
                 .centerCrop()
                 .into(binding.imgOverlay)
         } else {
-            Log.e("######","OverLy"+imagesList[imageCount].imgOverlayLogo)
+            Log.e("######", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.GONE
         }
         binding.imgOverlay.visibility = View.VISIBLE
         binding.imgOverlay.setImageURI(Uri.parse(imagesList[imageCount].imgOverlayLogo))
-        Log.e("$$$","OverLy"+imagesList[imageCount].imgOverlayLogo)
-        val title_name = imagesList[imageCount].imgName
-        val title = "Please capture: <font color='#0076BA'>$title_name</font>"
-        binding.txtTitle.setText(Html.fromHtml(title), TextView.BufferType.SPANNABLE)
+        Log.e("$$$", "OverLy" + imagesList[imageCount].imgOverlayLogo)
+        binding.txtTitle.text = imagesList[imageCount].imgName
         binding.captureLayout.visibility = View.VISIBLE
     }
 
@@ -901,10 +867,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             try {
-                /*  val resultIntent = Intent(binding.root.context, ImagesActivity::class.java)
-                  resultIntent.putExtra("return_object", imagesList)
-                  resultIntent.putExtra("from", "camera")
-                  startActivity(resultIntent)*/
+                camListImages?.myCamListImages(imagesList)
                 requireActivity().finish()
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -917,7 +880,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         /*water mark position*/
         if (CamPref.getIn(binding.root.context).isCamShowWaterMark) {
             binding.watermarkLogo.visibility = View.VISIBLE
-            val params = binding.watermarkLogo.getLayoutParams() as FrameLayout.LayoutParams
+            val params = binding.watermarkLogo.layoutParams as FrameLayout.LayoutParams
             params.gravity = CamPref.getIn(binding.root.context).camShowWaterMarkAtPos
             binding.watermarkLogo.layoutParams = params
         } else {

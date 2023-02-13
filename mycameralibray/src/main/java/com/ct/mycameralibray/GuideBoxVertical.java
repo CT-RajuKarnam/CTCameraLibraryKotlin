@@ -8,8 +8,6 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.ct.ctcameralib.CameraFragment;
-
 
 public class GuideBoxVertical extends View {
     private Rect rectBox;

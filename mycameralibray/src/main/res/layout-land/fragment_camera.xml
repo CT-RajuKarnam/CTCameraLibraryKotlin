@@ -140,60 +140,56 @@
 
     <LinearLayout
         android:id="@+id/captureLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
         android:layout_margin="10sp"
         android:visibility="gone"
         tools:visibility="visible"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         tools:ignore="RelativeOverlap">
-
-        <ImageView
-            android:id="@+id/imgSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="@string/app_name"
-            android:padding="10dp"
-            android:src="@drawable/ic_settings" />
 
         <ImageView
             android:id="@+id/btnFlash"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:padding="10dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_flash_off" />
+            android:src="@drawable/ic_flash_off"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/rotateCameraImg"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
             android:contentDescription="@string/app_name"
             android:padding="10dp"
             android:visibility="gone"
-            android:src="@drawable/ic_camera_switch" />
-
+            tools:visibility="visible"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/captureImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:contentDescription="@string/app_name"
             android:padding="10dp"
-            android:src="@drawable/ic_camera" />
+            android:src="@drawable/ic_camera"
+            app:tint="@color/white" />
 
 
         <TextView
             android:id="@+id/tvZoomLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="-10dp"
             android:text="1.0x"
             android:textColor="@color/white" />
 
@@ -201,10 +197,20 @@
             android:id="@+id/verticalSeekbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="2dp"
             android:layout_weight="1" />
 
+        <ImageView
+            android:id="@+id/imgSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:contentDescription="@string/app_name"
+            android:padding="10dp"
+            android:src="@drawable/ic_settings"
+            app:tint="@color/white" />
 
     </LinearLayout>
 

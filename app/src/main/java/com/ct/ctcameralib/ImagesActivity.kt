@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ct.ctcameralib.databinding.ActivityImagesBinding
 import com.ct.ctcameralib.databinding.LayoutImageTagsBinding
 import com.ct.mycameralibray.CamPref
+import com.ct.mycameralibray.CameraFragment
 import com.ct.mycameralibray.ImageTags
 import com.google.gson.Gson
 import org.json.JSONException
@@ -36,6 +37,8 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
         camFrag.setCamListImages(this)
         binding.lvImgTags.adapter = Pictures(imagesList)
         loadData()
+
+        Log.e("imagesList", Gson().toJson(CameraFragment.camImagesModel))
     }
 
     @SuppressLint("ViewHolder")
