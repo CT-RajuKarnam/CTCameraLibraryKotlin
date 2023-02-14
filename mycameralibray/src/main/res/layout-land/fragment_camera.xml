@@ -63,7 +63,7 @@
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
-                tools:text="TEsting lat" />
+                 />
 
             <TextView
                 android:id="@+id/titleName"
@@ -96,8 +96,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="bottom|right"
-            android:layout_margin="10dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_margin="10dp" />
 
 
         <TextView
@@ -107,7 +106,7 @@
             android:layout_marginTop="20dp"
             android:gravity="top|right"
             android:padding="10dp"
-            android:text="this is time stamp waiting for code"
+            android:text=""
             android:textColor="@android:color/holo_red_dark" />
 
 
@@ -124,8 +123,7 @@
             android:layout_width="192dp"
             android:layout_height="192dp"
             android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/overlayicon" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/txt_title"
@@ -136,7 +134,7 @@
             android:textColor="@android:color/holo_red_dark"
             android:textSize="18sp"
             android:textStyle="bold"
-            tools:text="Title/ Image Lable Name" />
+            tools:text="" />
     </FrameLayout>
 
     <LinearLayout

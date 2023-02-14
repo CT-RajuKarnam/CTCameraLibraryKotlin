@@ -63,7 +63,7 @@
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
-                tools:text="TEsting lat" />
+                tools:text="" />
 
             <TextView
                 android:id="@+id/titleName"
@@ -98,16 +98,16 @@
             android:layout_height="100dp"
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"
-            tools:visibility="gone"
-            android:src="@mipmap/ic_launcher" />
+            tools:visibility="gone" />
 
 
         <TextView
             android:layout_marginTop="20dp"
             android:id="@+id/txtTimeStamp"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="this is time stamp waiting for code"
+            android:text=""
             android:gravity="top|right"
             android:padding="10dp"
             android:textColor="@android:color/holo_red_dark" />
@@ -122,10 +122,10 @@
         android:layout_gravity="center">
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/img_overlay"
             android:layout_width="192dp"
             android:layout_height="192dp"
-            android:src="@mipmap/overlayicon"
             android:layout_gravity="center"
             android:scaleType="centerCrop" />
 
@@ -135,7 +135,8 @@
             android:layout_height="match_parent"
             android:padding="10dp"
             android:gravity="center_horizontal"
-            tools:text="Title/ Image Lable Name"
+            android:visibility="gone"
+            tools:text=""
             android:textColor="@android:color/holo_red_dark"
             android:textSize="18sp"
             android:textStyle="bold" />

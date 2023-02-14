@@ -215,12 +215,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                     e.printStackTrace()
                 }
             } else {
-                if (CamPref.getIn(binding.root.context).isCamShowLabelName) {
-                    binding.txtTitle.visibility = View.VISIBLE
 
-                } else {
-                    binding.txtTitle.visibility = View.GONE
-                }
                 if (CamPref.getIn(binding.root.context).orientationFlag) {
                     showToast("Please capture photo in landscape only", toastAngle)
                 } else {
@@ -526,15 +521,36 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             Glide.with(this)
                 .load(CamPref.getIn(binding.root.context).camWaterMarkUrl)
                 .into(binding.watermarkLogo)
+            val params = binding.watermarkLogo.layoutParams as FrameLayout.LayoutParams
+            params.gravity = CamPref.getIn(binding.root.context).camShowWaterMarkAtPos
+            binding.watermarkLogo.layoutParams = params
         } else {
             Log.e("######", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.watermarkLogo.visibility = View.GONE
         }
 
-        //binding.imgOverlay.visibility = View.VISIBLE
-        //binding.imgOverlay.setImageURI(Uri.parse(imagesList[imageCount].imgOverlayLogo))
-        //Log.e("$$$", "OverLy" + imagesList[imageCount].imgOverlayLogo)
-        binding.txtTitle.text = imagesList[imageCount].imgName
+        /*Text overlay*/
+        if (CamPref.getIn(binding.root.context).isCamShowTime || CamPref.getIn(binding.root.context).isCamShowAddress ||
+            CamPref.getIn(binding.root.context).isCamShowLatLong
+        ) {
+            binding.txtTimeStamp.visibility = View.VISIBLE
+            binding.txtTimeStamp.gravity = CamPref.getIn(binding.root.context).camDescPosition
+
+        } else {
+            binding.txtTimeStamp.visibility = View.GONE
+        }
+
+        if (CamPref.getIn(binding.root.context).isCamShowLabelName) {
+            binding.txtTitle.text = imagesList[imageCount].imgName
+            binding.txtTitle.visibility = View.VISIBLE
+
+        } else {
+            binding.txtTitle.visibility = View.GONE
+        }
+
+        binding.flViewHide.visibility = View.VISIBLE
+
+
         binding.captureLayout.visibility = View.VISIBLE
 
         Handler(Looper.myLooper()!!).postDelayed({
@@ -958,25 +974,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
     override fun applyListener() {
         startCamera()
         /*water mark position*/
-        if (CamPref.getIn(binding.root.context).isCamShowWaterMark) {
-            binding.watermarkLogo.visibility = View.VISIBLE
-            val params = binding.watermarkLogo.layoutParams as FrameLayout.LayoutParams
-            params.gravity = CamPref.getIn(binding.root.context).camShowWaterMarkAtPos
-            binding.watermarkLogo.layoutParams = params
-        } else {
-            binding.watermarkLogo.visibility = View.GONE
-        }
 
-        /*Text overlay*/
-        if (CamPref.getIn(binding.root.context).isCamShowTime || CamPref.getIn(binding.root.context).isCamShowAddress ||
-            CamPref.getIn(binding.root.context).isCamShowLatLong
-        ) {
-            binding.txtTimeStamp.visibility = View.VISIBLE
-            binding.txtTimeStamp.gravity = CamPref.getIn(binding.root.context).camDescPosition
-
-        } else {
-            binding.txtTimeStamp.visibility = View.GONE
-        }
 
 
         if (CamPref.getIn(binding.root.context).isCamShowLabelName) {
