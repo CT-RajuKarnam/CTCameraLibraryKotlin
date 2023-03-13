@@ -101,6 +101,13 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
                 startActivity(intent)
             }
 
+            holder.captureImage.setOnClickListener {
+                val intent = Intent(this@ImagesActivity, ZoomImageActivity::class.java)
+                intent.putExtra("images_list", imagesList)
+                intent.putExtra("position", position)
+                startActivity(intent)
+            }
+
         }
 
         override fun getItemCount(): Int {
@@ -125,7 +132,7 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
 
 
     private fun loadData() {
-        var jsonObject: JSONObject? = null
+        var jsonObject: JSONObject?
         try {
             jsonObject = JSONObject(loadJSONFromAsset())
             val images = jsonObject.getJSONArray("CamImages")
@@ -179,8 +186,8 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
         imagesList?.clear()
         imagesList = myCameraImages
         binding.lvImgTags.adapter = Pictures(imagesList)
-        Log.e("####", "Camera Images@" + imagesList!!.get(0).imgPath)
-        Log.e("####", "Camera Images#" + imagesList!!.get(0).imgName)
+        Log.e("####", "Camera Images@" + imagesList!![0].imgPath)
+        Log.e("####", "Camera Images#" + imagesList!![0].imgName)
     }
 
     override fun onRequestPermissionsResult(

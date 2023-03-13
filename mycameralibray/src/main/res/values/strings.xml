@@ -9,6 +9,7 @@
     <string name="txt_time">Time Stamp</string>
     <string name="txt_guide_box">Guide Box</string>
     <string name="txt_apply">Apply</string>
+    <string name="txt_reset">Reset</string>
     <string-array name="watermarkPosition">
         <item>Watermark Position</item>
         <item>Top-Left</item>

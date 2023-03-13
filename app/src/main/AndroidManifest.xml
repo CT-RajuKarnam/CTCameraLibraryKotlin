@@ -17,6 +17,9 @@
         android:theme="@style/Theme.CTCAMERALib"
         tools:targetApi="31">
         <activity
+            android:name=".ZoomImageActivity"
+            android:exported="false" />
+        <activity
             android:name=".CameraActivity"
             android:exported="false" />
         <activity

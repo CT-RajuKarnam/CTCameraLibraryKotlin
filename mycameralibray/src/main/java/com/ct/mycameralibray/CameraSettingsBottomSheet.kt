@@ -8,14 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class CameraSettingsBottomSheet(var myListener: MyListener) :
+class CameraSettingsBottomSheet(private var myListener: MyListener) :
     BottomSheetDialogFragment() {
     var swWatermark: SwitchCompat? = null
     var swAddress: SwitchCompat? = null
@@ -107,19 +106,19 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
             rb34!!.isChecked = false
             rb11!!.isChecked = false
         }
-        imgCloseDialog!!.setOnClickListener { view12: View? ->
+        imgCloseDialog!!.setOnClickListener {
             dismiss()
         }
-        btnApply!!.setOnClickListener { view1: View? ->
+        btnApply!!.setOnClickListener {
             myListener.applyListener()
             dismiss()
         }
-        btnReset!!.setOnClickListener { view13: View? ->
+        btnReset!!.setOnClickListener {
             CamPref.getIn(requireContext()).clearPref()
             myListener.applyListener()
             dismiss()
         }
-        swWatermark!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swWatermark!!.setOnCheckedChangeListener { _, b: Boolean ->
             if (b) {
                 CamPref.getIn(requireContext()).isCamShowWaterMark = true
                 spWatermarkPosition!!.setSelection(1, true)
@@ -128,7 +127,7 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
                 spWatermarkPosition!!.setSelection(0, true)
             }
         }
-        swAddress!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swAddress!!.setOnCheckedChangeListener { _, b: Boolean ->
             if (b) {
                 CamPref.getIn(requireContext()).isCamShowAddress = true
                 swTextOverlay!!.isChecked = true
@@ -139,7 +138,7 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
                 }
             }
         }
-        swLatLng!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swLatLng!!.setOnCheckedChangeListener { _, b: Boolean ->
             if (b) {
                 CamPref.getIn(requireContext()).isCamShowLatLong = true
                 swTextOverlay!!.isChecked = true
@@ -150,7 +149,7 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
                 }
             }
         }
-        swTime!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swTime!!.setOnCheckedChangeListener { _, b: Boolean ->
             if (b) {
                 CamPref.getIn(requireContext()).isCamShowTime = true
                 swTextOverlay!!.isChecked = true
@@ -165,39 +164,45 @@ class CameraSettingsBottomSheet(var myListener: MyListener) :
             CamPref.getIn(requireContext()).isCamShowAddress || CamPref.getIn(requireContext()).isCamShowLatLong || CamPref.getIn(
                 requireContext()
             ).isCamShowTime
-        swTextOverlay!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swTextOverlay!!.setOnCheckedChangeListener { _, b: Boolean ->
             if (b) {
                 spTextAt!!.setSelection(1, true)
             } else {
                 spTextAt!!.setSelection(0, true)
             }
         }
-        swGuideBox!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swGuideBox!!.setOnCheckedChangeListener { _, b: Boolean ->
             CamPref.getIn(
                 requireContext()
             ).isCamShowGuidBox = b
         }
-        swLabel!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swLabel!!.setOnCheckedChangeListener { _, b: Boolean ->
             CamPref.getIn(
                 requireContext()
             ).isCamShowLabelName = b
         }
-        swHelper!!.setOnCheckedChangeListener { compoundButton: CompoundButton?, b: Boolean ->
+        swHelper!!.setOnCheckedChangeListener { _, b: Boolean ->
             CamPref.getIn(
                 requireContext()
             ).isCamShowOverlayImg = b
         }
-        rgAspectRatio!!.setOnCheckedChangeListener { radioGroup: RadioGroup?, i: Int ->
-            if (i == R.id.rbFull) {
-                CamPref.getIn(requireContext()).camAspectRatio = "Full"
-            } else if (i == R.id.rb916) {
-                CamPref.getIn(requireContext()).camAspectRatio = "9:16"
-            } else if (i == R.id.rb34) {
-                CamPref.getIn(requireContext()).camAspectRatio = "3:4"
-            } else if (i == R.id.rb11) {
-                CamPref.getIn(requireContext()).camAspectRatio = "1:1"
-            } else {
-                CamPref.getIn(requireContext()).camAspectRatio = ""
+        rgAspectRatio!!.setOnCheckedChangeListener { _, i: Int ->
+            when (i) {
+                R.id.rbFull -> {
+                    CamPref.getIn(requireContext()).camAspectRatio = "Full"
+                }
+                R.id.rb916 -> {
+                    CamPref.getIn(requireContext()).camAspectRatio = "9:16"
+                }
+                R.id.rb34 -> {
+                    CamPref.getIn(requireContext()).camAspectRatio = "3:4"
+                }
+                R.id.rb11 -> {
+                    CamPref.getIn(requireContext()).camAspectRatio = "1:1"
+                }
+                else -> {
+                    CamPref.getIn(requireContext()).camAspectRatio = "3:4"
+                }
             }
         }
         val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
