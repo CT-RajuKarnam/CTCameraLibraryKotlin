@@ -36,12 +36,12 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
     protected var locationManager: LocationManager? = null
 
     init {
-        getLocation()
+        getLocationinfo()
     }
 
-    @JvmName("getLocation1")
+    @JvmName("getLocationinfo")
     @SuppressLint("MissingPermission")
-    fun getLocation(): Location {
+    fun getLocationinfo(): Location {
         try {
             locationManager = mContext
                 .getSystemService(LOCATION_SERVICE) as LocationManager

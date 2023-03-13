@@ -375,7 +375,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
 
             //front camera and flash off
-            if (imagesList[imageCount].imgName.contains("Selfie")) {
+            if (imagesList[imageCount].imgName!!.contains("Selfie")) {
                 cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 //                CamPref.getIn(binding.root.context).camSwitch = "front"
                 if (camera?.cameraInfo?.hasFlashUnit() == true) {
@@ -526,7 +526,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
 
 
-        if (imagesList[imageCount].imgOverlayLogo.isNotEmpty() && CamPref.getIn(binding.root.context).isCamShowOverlayImg) {
+        if (imagesList[imageCount].imgOverlayLogo!!.isNotEmpty() && CamPref.getIn(binding.root.context).isCamShowOverlayImg) {
 
             Log.e("@####", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.VISIBLE
