@@ -297,14 +297,14 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                         }
 
                         if (CamPref.getIn(binding.root.context).isCamShowLatLong) {
-                            if (appLocationService!!.getLocation() != null)
+                            if (appLocationService!!.getLocationinfo() != null)
                                 desc =
                                     desc + "\nLat: " + twoDecimalForm.format(appLocationService!!.getLatitude()) + ", Lng:" + twoDecimalForm.format(
                                         appLocationService!!.getLongitude()
                                     )
                         }
                         if (CamPref.getIn(binding.root.context).isCamShowAddress) {
-                            if (appLocationService!!.getLocation() != null)
+                            if (appLocationService!!.getLocationinfo() != null)
                                 desc = desc + "\nAddress: " + appLocationService!!.getAddress()
                         }
                         binding.txtTimeStamp.text = desc
@@ -337,7 +337,6 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             if(CamPref.getIn(context).camAspectRatio.equals("3:4")){
                 preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3).build()
                     .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }
-                    .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }
             }else{
                 preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_16_9).build()
                     .also { it.setSurfaceProvider(binding.cameraView.surfaceProvider) }
@@ -347,11 +346,34 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                 .setFlashMode(ImageCapture.FLASH_MODE_OFF)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY).build()
 
-            val imageAnalyzer = ImageAnalysis.Builder().build().also {
+            /*val imageAnalyzer = ImageAnalysis.Builder().build().also {
                 it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
 //                    Log.d("TAG", "startCamera: $luma")
                 })
             }
+*/
+            val imageAnalysis = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+
+            /*imageAnalysis.setAnalyzer(cameraExecutor, object : ImageAnalysis.Analyzer {
+                override fun analyze(image: ImageProxy) {
+                    val buffer = image.planes[0].buffer
+                    val bytes = ByteArray(buffer.capacity())
+                    buffer.get(bytes)
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    val pixels = IntArray(bitmap.width * bitmap.height)
+                    bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+                    var sum = 0
+                    for (pixel in pixels) {
+                        sum += Color.red(pixel) + Color.green(pixel) + Color.blue(pixel)
+                    }
+                    val avgPixelValue = sum / (3 * pixels.size)
+                    Log.d("analysis", "Average pixel value: $avgPixelValue")
+                    image.close()
+                }
+            })*/
+
 
             //front camera and flash off
             if (imagesList[imageCount].imgName.contains("Selfie")) {
@@ -373,7 +395,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                     cameraSelector!!,
                     preview,
                     imageCapture,
-                    imageAnalyzer
+                    imageAnalysis
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -506,14 +528,25 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
 
         if (imagesList[imageCount].imgOverlayLogo.isNotEmpty() && CamPref.getIn(binding.root.context).isCamShowOverlayImg) {
+
             Log.e("@####", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.VISIBLE
             Glide.with(this)
                 .load(imagesList[imageCount].imgOverlayLogo)
                 .into(binding.imgOverlay)
+
+            if(imagesList[imageCount].imgFrontCam.equals("y")){
+                binding.imgOverlay.visibility = View.GONE
+                binding.imgfrontOverlay?.visibility = View.VISIBLE
+            }else{
+                binding.imgOverlay.visibility = View.VISIBLE
+                binding.imgfrontOverlay?.visibility = View.GONE
+            }
+
         } else {
             Log.e("######", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.GONE
+            binding.imgfrontOverlay?.visibility = View.GONE
         }
 
         if (CamPref.getIn(binding.root.context).camWaterMarkUrl.isNotEmpty() && CamPref.getIn(binding.root.context).isCamShowWaterMark) {
