@@ -25,7 +25,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.core.Camera
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -354,7 +353,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             }
 
             //front camera and flash off
-            if (imagesList[imageCount].imgName.contains("Selfie")) {
+            if (imagesList[imageCount].imgName!!.contains("Selfie")) {
                 cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 //                CamPref.getIn(binding.root.context).camSwitch = "front"
                 if (camera?.cameraInfo?.hasFlashUnit() == true) {
@@ -505,7 +504,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
 
 
-        if (imagesList[imageCount].imgOverlayLogo.isNotEmpty() && CamPref.getIn(binding.root.context).isCamShowOverlayImg) {
+        if (imagesList[imageCount].imgOverlayLogo?.isNotEmpty()!! && CamPref.getIn(binding.root.context).isCamShowOverlayImg) {
             Log.e("@####", "OverLy" + imagesList[imageCount].imgOverlayLogo)
             binding.imgOverlay.visibility = View.VISIBLE
             Glide.with(this)
@@ -988,7 +987,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
 
     }
 
-    fun copyBitmap(src: Bitmap): Bitmap {
+    private fun copyBitmap(src: Bitmap): Bitmap {
         val config = if (src.config != null) src.config else Bitmap.Config.ARGB_8888
         val copy = Bitmap.createBitmap(src.width, src.height, config)
         val canvas = Canvas(copy)

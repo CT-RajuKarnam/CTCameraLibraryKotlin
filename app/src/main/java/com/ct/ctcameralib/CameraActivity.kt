@@ -16,7 +16,7 @@ class CameraActivity : AppCompatActivity(), CameraFragment.CamImages {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) {
-            imageCount = savedInstanceState.getInt("position");
+            imageCount = savedInstanceState.getInt("position")
             imagesList = savedInstanceState.getSerializable("images_list") as ArrayList<ImageTags>
 
             if (imagesList[imageCount].imgOrientation.equals("P")) {
