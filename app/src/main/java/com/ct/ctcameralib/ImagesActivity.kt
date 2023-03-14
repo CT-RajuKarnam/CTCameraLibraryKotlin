@@ -72,6 +72,7 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
             var imageName: TextView = bindingView.tvPicture
             var btnSelectImage: ImageView = bindingView.btnGallery
             var captureImage: AppCompatImageView = bindingView.ivPicture
+            var ivdelete: AppCompatImageView = bindingView.ivdelete
             var btnEdit: ImageView = bindingView.btnCrop
             var btnDelete: ImageView = bindingView.btnDelete
 
@@ -92,6 +93,7 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
                 val uri = Uri.parse(imagesList!![position].imgPath)
                 holder.captureImage.setImageURI(uri)
                 holder.captureImage.visibility = View.VISIBLE
+                holder.ivdelete.visibility = View.VISIBLE
                 holder.btnSelectImage.visibility = View.GONE
             }
             holder.btnSelectImage.setOnClickListener {
@@ -106,6 +108,14 @@ class ImagesActivity : AppCompatActivity(), CameraFragment.CamListImages {
                 intent.putExtra("images_list", imagesList)
                 intent.putExtra("position", position)
                 startActivity(intent)
+            }
+
+            holder.ivdelete.setOnClickListener {
+                imagesList!!.get(position).imgPath=null;
+                holder.captureImage.visibility = View.GONE
+                holder.ivdelete.visibility = View.GONE
+                holder.btnSelectImage.visibility = View.VISIBLE
+                notifyDataSetChanged()
             }
 
         }

@@ -166,7 +166,7 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
             ) { //(x>=7 and (z<=5 and z>-1) (y>-3 and y<4)//land scape
                 x > 6 && z > -1 && z < 6 && y > -3 && y < 4
             } else { //portait for take paper docs
-                x < 4 && x > -4 && y >= 0 && z > -1
+                x < 4 && x > -4 && y >= 0 && z > -1  && z<3
             }
 
             if (shutterFlag) {
@@ -988,6 +988,8 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         x = sensorEvent?.values!![0].toInt()
         y = sensorEvent.values!![1].toInt()
         z = sensorEvent.values!![2].toInt()
+
+        Log.e("",""+x+":"+y+":"+z)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
