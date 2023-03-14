@@ -9,7 +9,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        minSdk 24
+        minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -63,7 +63,7 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId = 'com.github.CT-RajuKarnam'
                 artifactId = 'CTCameraLibraryKotlin'
-                version = '2.3'
+                version = '3.0'
                 artifact(bundleReleaseAar)
             }
         }
