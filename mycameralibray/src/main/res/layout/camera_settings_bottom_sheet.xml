@@ -33,6 +33,7 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatRadioButton
+                    android:visibility="gone"
                     android:id="@+id/rb11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,6 +81,7 @@
                     android:theme="@style/SCBSwitch" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
+                    android:visibility="gone"
                     android:id="@+id/rbFull"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

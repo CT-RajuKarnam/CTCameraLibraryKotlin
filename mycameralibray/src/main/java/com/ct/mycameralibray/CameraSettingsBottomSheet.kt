@@ -14,7 +14,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
-class CameraSettingsBottomSheet(private var myListener: MyListener) :
+class CameraSettingsBottomSheet(
+    private var myListener: MyListener,
+    private var imgOrientation: String
+) :
     BottomSheetDialogFragment() {
     var swWatermark: SwitchCompat? = null
     var swAddress: SwitchCompat? = null
@@ -43,7 +46,7 @@ class CameraSettingsBottomSheet(private var myListener: MyListener) :
         arrayOf<String?>("Label Position", "Top-Left", "Top-Right", "Bottom-Left", "Bottom-right")
     var descStatePosition: String? = ""
     var desc = ""
-    var aspectRatioPosition = arrayOf<String?>("Aspect Ratio", "Full", "9:16", "3:4", "1:1")
+    var aspectRatioPosition = arrayOf<String?>("Aspect Ratio", "9:16", "3:4")
     var arStatePosition: String? = ""
     var aspectRatio = ""
     var rgAspectRatio: RadioGroup? = null
@@ -92,19 +95,37 @@ class CameraSettingsBottomSheet(private var myListener: MyListener) :
         swGuideBox!!.isChecked = CamPref.getIn(requireContext()).isCamShowGuidBox
         swLabel!!.isChecked = CamPref.getIn(requireContext()).isCamShowLabelName
         swHelper!!.isChecked = CamPref.getIn(requireContext()).isCamShowOverlayImg
-        if (CamPref.getIn(requireContext()).camAspectRatio.equals("Full", ignoreCase = true)) {
-            rbFull!!.isChecked = true
-        } else if (CamPref.getIn(requireContext()).camAspectRatio.equals("9:16", ignoreCase = true)) {
-            rb916!!.isChecked = true
-        } else if (CamPref.getIn(requireContext()).camAspectRatio.equals("3:4", ignoreCase = true)) {
-            rb34!!.isChecked = true
-        } else if (CamPref.getIn(requireContext()).camAspectRatio.equals("1:1", ignoreCase = true)) {
-            rb11!!.isChecked = true
-        } else {
-            rbFull!!.isChecked = false
-            rb916!!.isChecked = false
-            rb34!!.isChecked = false
-            rb11!!.isChecked = false
+
+        if (imgOrientation.equals("L")) {
+            rgAspectRatio!!.visibility = View.VISIBLE
+            if (CamPref.getIn(requireContext()).camAspectRatio.equals("Full", ignoreCase = true)) {
+                rbFull!!.isChecked = true
+            } else if (CamPref.getIn(requireContext()).camAspectRatio.equals(
+                    "9:16",
+                    ignoreCase = true
+                )
+            ) {
+                rb916!!.isChecked = true
+            } else if (CamPref.getIn(requireContext()).camAspectRatio.equals(
+                    "3:4",
+                    ignoreCase = true
+                )
+            ) {
+                rb34!!.isChecked = true
+            } else if (CamPref.getIn(requireContext()).camAspectRatio.equals(
+                    "1:1",
+                    ignoreCase = true
+                )
+            ) {
+                rb11!!.isChecked = true
+            } else {
+                rbFull!!.isChecked = false
+                rb916!!.isChecked = false
+                rb34!!.isChecked = false
+                rb11!!.isChecked = false
+            }
+        }else{
+            rgAspectRatio!!.visibility = View.GONE
         }
         imgCloseDialog!!.setOnClickListener {
             dismiss()
@@ -144,7 +165,10 @@ class CameraSettingsBottomSheet(private var myListener: MyListener) :
                 swTextOverlay!!.isChecked = true
             } else {
                 CamPref.getIn(requireContext()).isCamShowLatLong = false
-                if (!CamPref.getIn(requireContext()).isCamShowAddress && !CamPref.getIn(requireContext()).isCamShowTime) {
+                if (!CamPref.getIn(requireContext()).isCamShowAddress && !CamPref.getIn(
+                        requireContext()
+                    ).isCamShowTime
+                ) {
                     swTextOverlay!!.isChecked = false
                 }
             }
@@ -155,7 +179,10 @@ class CameraSettingsBottomSheet(private var myListener: MyListener) :
                 swTextOverlay!!.isChecked = true
             } else {
                 CamPref.getIn(requireContext()).isCamShowTime = false
-                if (!CamPref.getIn(requireContext()).isCamShowAddress && !CamPref.getIn(requireContext()).isCamShowLatLong) {
+                if (!CamPref.getIn(requireContext()).isCamShowAddress && !CamPref.getIn(
+                        requireContext()
+                    ).isCamShowLatLong
+                ) {
                     swTextOverlay!!.isChecked = false
                 }
             }
@@ -296,10 +323,12 @@ class CameraSettingsBottomSheet(private var myListener: MyListener) :
             ) {
                 if (position > 0) {
                     if (descPosition[position].equals("Top-Left", ignoreCase = true)) {
-                        CamPref.getIn(requireContext()).camDescPosition = Gravity.TOP or Gravity.LEFT
+                        CamPref.getIn(requireContext()).camDescPosition =
+                            Gravity.TOP or Gravity.LEFT
                         CamPref.getIn(requireContext()).camShowTextAt = "Top-Left"
                     } else if (descPosition[position].equals("Top-Right", ignoreCase = true)) {
-                        CamPref.getIn(requireContext()).camDescPosition = Gravity.TOP or Gravity.RIGHT
+                        CamPref.getIn(requireContext()).camDescPosition =
+                            Gravity.TOP or Gravity.RIGHT
                         CamPref.getIn(requireContext()).camShowTextAt = "Top-Right"
                     } else if (descPosition[position].equals("Bottom-Left", ignoreCase = true)) {
                         CamPref.getIn(requireContext()).camDescPosition =

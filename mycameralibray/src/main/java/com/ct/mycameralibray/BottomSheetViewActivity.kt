@@ -7,6 +7,7 @@ import com.ct.mycameralibray.MyListener
 class BottomSheetViewActivity : AppCompatActivity(),MyListener {
 
     var myListener: MyListener? = null
+    var imgOrientation:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -14,7 +15,7 @@ class BottomSheetViewActivity : AppCompatActivity(),MyListener {
 
         myListener = this
 
-        val bottomSheet = CameraSettingsBottomSheet(myListener!!)
+        val bottomSheet = CameraSettingsBottomSheet(myListener!!,imgOrientation)
         bottomSheet.show(supportFragmentManager, "CameraBottomSheet")
     }
 

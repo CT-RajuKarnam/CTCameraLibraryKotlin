@@ -150,8 +150,12 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         }
 
         binding.imgSettings.setOnClickListener {
-            val bottomSheet = CameraSettingsBottomSheet(myListener!!)
-            bottomSheet.show(requireActivity().supportFragmentManager, "CameraBottomSheet")
+            val bottomSheet = imagesList[imageCount].imgOrientation?.let { it1 ->
+                CameraSettingsBottomSheet(myListener!!,
+                    it1
+                )
+            }
+            bottomSheet?.show(requireActivity().supportFragmentManager, "CameraBottomSheet")
         }
 
         //capture image
@@ -295,16 +299,14 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                             desc = DateFormat.format("dd-MM-yyyy HH:mm:ss", Date()).toString()
                         }
 
-                        if (CamPref.getIn(binding.root.context).isCamShowLatLong) {
-                            if (appLocationService!!.getLocationinfo() != null)
-                                desc =
-                                    desc + "\nLat: " + twoDecimalForm.format(appLocationService!!.getLatitude()) + ", Lng:" + twoDecimalForm.format(
-                                        appLocationService!!.getLongitude()
-                                    )
+                        if (CamPref.getIn(binding.root.context).isCamShowLatLong && appLocationService!!.getLatitude()!=0.0) {
+                            desc =
+                                desc + "\nLat: " + twoDecimalForm.format(appLocationService!!.getLatitude()) + ", Lng:" + twoDecimalForm.format(
+                                    appLocationService!!.getLongitude()
+                                )
                         }
-                        if (CamPref.getIn(binding.root.context).isCamShowAddress) {
-                            if (appLocationService!!.getLocationinfo() != null)
-                                desc = desc + "\nAddress: " + appLocationService!!.getAddress()
+                        if (CamPref.getIn(binding.root.context).isCamShowAddress && appLocationService!!.getAddress()!="") {
+                            desc = desc + "\nAddress: " + appLocationService!!.getAddress()
                         }
                         binding.txtTimeStamp.text = desc
                     }

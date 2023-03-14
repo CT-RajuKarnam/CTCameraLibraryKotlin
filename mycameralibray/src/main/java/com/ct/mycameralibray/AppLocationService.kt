@@ -36,7 +36,7 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
     protected var locationManager: LocationManager? = null
 
     init {
-        getLocationinfo()
+        location;//getLocationinfo()
     }
 
     @JvmName("getLocationinfo")
@@ -92,22 +92,27 @@ class AppLocationService(private val mContext: Context) : Service(), LocationLis
 
     @JvmName("getAddress1")
     fun getAddress(): String? {
-        val geocoder: Geocoder
-        val addresses: List<Address>?
-        geocoder = Geocoder(mContext, Locale.getDefault())
-        addresses = geocoder.getFromLocation(
-            location!!.latitude,
-            location!!.longitude,
-            1
-        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-        val address =
-            addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        val city = addresses[0].locality
-        val state = addresses[0].adminArea
-        val country = addresses[0].countryName
-        val postalCode = addresses[0].postalCode
-        val knownName = addresses[0].featureName
-        return address
+        if(location!=null) {
+            val geocoder: Geocoder
+            val addresses: List<Address>?
+            geocoder = Geocoder(mContext, Locale.getDefault())
+            addresses = geocoder.getFromLocation(
+                location!!.latitude,
+                location!!.longitude,
+                1
+            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            val address =
+                addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            val city = addresses[0].locality
+            val state = addresses[0].adminArea
+            val country = addresses[0].countryName
+            val postalCode = addresses[0].postalCode
+            val knownName = addresses[0].featureName
+            return address
+        }else{
+            return "";
+        }
+
     }
 
     // Here 1 represent max location result to returned, by documents it recommended 1 to 5
