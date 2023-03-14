@@ -299,13 +299,13 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
                             desc = DateFormat.format("dd-MM-yyyy HH:mm:ss", Date()).toString()
                         }
 
-                        if (CamPref.getIn(binding.root.context).isCamShowLatLong && appLocationService!!.getLatitude()!=0.0) {
+                        if (CamPref.getIn(binding.root.context).isCamShowLatLong) {
                             desc =
                                 desc + "\nLat: " + twoDecimalForm.format(appLocationService!!.getLatitude()) + ", Lng:" + twoDecimalForm.format(
                                     appLocationService!!.getLongitude()
                                 )
                         }
-                        if (CamPref.getIn(binding.root.context).isCamShowAddress && appLocationService!!.getAddress()!="") {
+                        if (CamPref.getIn(binding.root.context).isCamShowAddress) {
                             desc = desc + "\nAddress: " + appLocationService!!.getAddress()
                         }
                         binding.txtTimeStamp.text = desc
@@ -989,7 +989,6 @@ class CameraFragment : Fragment(), SensorEventListener, MyListener {
         y = sensorEvent.values!![1].toInt()
         z = sensorEvent.values!![2].toInt()
 
-        Log.e("",""+x+":"+y+":"+z)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
